@@ -1,7 +1,8 @@
 # PT_Library_Pi_UltimateRaspetarberry
-PT_Library_Pi_UltimateRaspetarberry is a public repository which contains a personal collection of libraries, demos and diagrams for Raspberry Pi.
 
 ## General Information
+PT_Library_Pi_UltimateRaspetarberry is a public repository which contains a personal collection of libraries, demos and diagrams for Raspberry Pi.
+
 ![Repo Cover](demos/raspetarberryPiDemoLCD1602AndTempSensorDHT11.jpg)
 
 ## Contents
@@ -14,3 +15,5 @@ PT_Library_Pi_UltimateRaspetarberry is a public repository which contains a pers
 	- demos/raspetarberryPiDemoLCD1602AndTempSensorDHT11_01.py
 
 ## Sources of Information
+[Good article on Multiprocessing](https://analyticsindiamag.com/run-python-code-in-parallel-using-multiprocessing/#:~:text=Multiprocessing%20in%20Python%20enables%20the,run%20tasks%2Fprocesses%20in%20parallel.&text=Multiprocessing%20enables%20the%20computer%20to,involve%20a%20lot%20of%20computation.)  
+[Stack Overflow article on Multiprocessing with Lock](https://stackoverflow.com/questions/28267972/python-multiprocessing-locks)
