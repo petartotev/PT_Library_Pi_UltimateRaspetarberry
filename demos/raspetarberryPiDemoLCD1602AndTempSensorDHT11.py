@@ -1,27 +1,47 @@
-import sys
-sys.path.append("../libraries")
-import piLibCamera
-import datetime
-from time import sleep
+import time
+import Adafruit_DHT
+from rpi_lcd import LCD
+from datetime import datetime
+import threading
 
-def getDirectory(type):
-	if type == 'photo':
-		return "/home/pi/Desktop/MyDocuments/MyPhotos/"
-	elif type == 'video':
-		return "/home/pi/Desktop/MyDocuments/MyVideos"
-	else:
-		raise ValueError('Path input is invalid!')
+# pinVcc = 3V3 (1)
+# pinGnd = GND (9)
+pinSignal = 17 # GPIO17 (11)
 
-piLibCamera.takeShot(getDirectory("photo"))
-sleep(5)
-piLibCamera.takeShot(getDirectory("photo"), 600, 600)
-sleep(5)
-piLibCamera.takeShotPerMinute(getDirectory("photo"), 3)
-sleep(5)
-piLibCamera.takeShotPerMinute(getDirectory("photo"), 3, 300, 900)
-sleep(5)
-piLibCamera.takeVideo(getDirectory("video"), 20)
-sleep(5)
-piLibCamera.takeVideo(getDirectory("video"), 10, 300, 300)
-sleep(5)
-piLibCamera.takeShot(getDirectory("wrong"))
+screen = LCD()
+
+def getDataFromDHT11():
+	while True:
+		try:
+			humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, pinSignal)
+			return humidity, temperature
+		except RuntimeError as error:
+			# Errors happen fairly often, DHT's are hard to read, just keep going.
+			print("Runtime error!")
+			print(error.args[0])
+			continue
+		except Exception as error:
+			print("Exception error!")
+			raise error
+		finally:
+			time.sleep(5)
+
+def displayTime(isOnLine1):
+	lineToDisplayOn = 1 if isOnLine1 else 2
+	datetimenow = str(datetime.now()).replace('-','')
+	textDate = datetimenow[2:8]
+	textTime = datetimenow[9:17]
+	screen.text(textTime + '  ' + textDate, lineToDisplayOn)
+
+def displayDataFromDHT11(isOnLine1):
+	lineToDisplayOn = 1 if isOnLine1 else 2
+	humidity, temperature = getDataFromDHT11()
+	textTemp = "{:.1f}`C".format(temperature)
+	textHumidity = "{}%".format(humidity)
+	screen.text(textTemp + ', ' + textHumidity, lineToDisplayOn)
+
+while(True):
+	displayTime(True)
+	displayDataFromDHT11(False)
+	#th = threading.Thread(target=displayDataFromDHT11(False))
+	#th.start()
