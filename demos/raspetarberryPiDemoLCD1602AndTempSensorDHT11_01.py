@@ -21,14 +21,17 @@ errDisplayDHT11 = "ERR:displayDHT11"
 lock = multiprocessing.Lock()
 
 def runDemo():
-	while(True):
-		#displayTime(True)
-		#displayDataFromDHT11(False)
-		process1 = multiprocessing.Process(target=displayTimeWithLock, args=(True, lock))
-		process2 = multiprocessing.Process(target=displayDataFromDHT11WithLock, args=(False, lock))
-		process1.start()
-		process2.start()
-		time.sleep(0.95)
+	try:
+		while(True):
+			#displayTime(True)
+			#displayDataFromDHT11(False)
+			process1 = multiprocessing.Process(target=displayTimeWithLock, args=(True, lock))
+			process2 = multiprocessing.Process(target=displayDataFromDHT11WithLock, args=(False, lock))
+			process1.start()
+			process2.start()
+			time.sleep(0.95)
+	except KeyboardInterrupt:
+			screen.clear()
 
 def getDataFromDHT11Once():
 	try:
