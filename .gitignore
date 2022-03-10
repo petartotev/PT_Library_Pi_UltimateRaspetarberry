@@ -130,3 +130,5 @@ dmypy.json
 
 # PT: Ignore PSD files
 *.psd
+# PT: Ignore Credentials
+credentials.py
