@@ -132,3 +132,5 @@ dmypy.json
 *.psd
 # PT: Ignore Credentials
 credentials.py
+# PT: Ignore bin folder
+/bin
