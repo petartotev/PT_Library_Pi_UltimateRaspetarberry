@@ -133,6 +133,7 @@ def main():
 					steps(degCurr)
 				else:
 					steps(-(2048 - degCurr))
+				degCurr = 0
 				print("ERROR: Request to Weather API failed!")
 				time.sleep(10)
 				continue
