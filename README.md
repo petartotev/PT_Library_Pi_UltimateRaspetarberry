@@ -3,7 +3,7 @@
 ## General Information
 PT_Library_Pi_UltimateRaspetarberry is a public repository which contains a personal collection of libraries, demos and diagrams for Raspberry Pi.
 
-![Repo Cover](demos/raspetarberryPiDemoLCD1602AndTempSensorDHT11.jpg)
+![cover](demos/raspetarberry_pi_demo_lcd_1602_temp_sensor_dht11.jpg)
 
 ## Contents
 - /demos - Python scripts that implement the libraries of this repository
