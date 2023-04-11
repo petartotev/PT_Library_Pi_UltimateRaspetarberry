@@ -13,11 +13,18 @@ screen = LCD()
 # temp: 21.25°C
 # 2022-09-07
 # 23:23:23
-
 # pinVcc = 3V3 (1)
 # pinGnd = GND (9)
+
 PIN_SIGNAL = 4 # GPIO4 (7)
 
+# DHT22 AM2302 Temperature and Humidity Sensor
+def get_humidity_and_temperature():
+    """Function gets data from DHT22 sensor."""
+    humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT22, PIN_SIGNAL)
+    return "{:.2f}%".format(humidity), "{:.2f}'C".format(temperature)
+
+# LCD 1602
 def display_text_on_lcd_screen(line1, line2, time_sleep):
     """Function displays text on LCD screen."""
     screen.text(line1, 1)
@@ -25,21 +32,21 @@ def display_text_on_lcd_screen(line1, line2, time_sleep):
     time.sleep(time_sleep)
     screen.clear()
 
-def get_humidity_and_temperature():
-    """Function gets data from DHT22 sensor."""
-    humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT22, PIN_SIGNAL)
-    return "{:.2f}%".format(humidity), "{:.2f}'C".format(temperature)
-
-def display_humidity_and_temperature():
-    """Function displays gathered data on LCD screen."""
-    humidity, temperature = get_humidity_and_temperature()
-    display_text_on_lcd_screen(f'humidity: {humidity}', f'temp: {temperature}', 6)
-
 def display_date_and_time(rangerepeat):
     """Function displays date and time on LCD screen."""
     for _ in range(rangerepeat):
         datestr = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S").split()
         display_text_on_lcd_screen(datestr[0], datestr[1], 1)
+
+def display_data_from_sensors():
+    """Function displays data gathered from sensors on LCD screen."""
+    humidity, temperature = get_humidity_and_temperature()
+    date_now = datetime.datetime.now()
+    if date_now.minute == 0 or date_now.minute == 30:
+        with open("/home/pi/Desktop/repos/PT_Library_Pi_UltimateRaspetarberry/temp.csv", "a") as mytemp:
+            mytemp.write(f'{date_now},{temperature},{humidity}\n')
+        time.sleep(60)
+    display_text_on_lcd_screen(f'humidity: {humidity}', f'temp: {temperature}', 6)
 
 def welcome():
     """Function displays welcome text on LCD screen."""
@@ -52,7 +59,7 @@ def play():
     welcome()
     while True:
         try:
-            display_humidity_and_temperature()
+            display_data_from_sensors()
             time.sleep(0.5)
             display_date_and_time(6)
         except RuntimeError as error:
@@ -72,13 +79,10 @@ def close():
     screen.text('Goodbye...', 1)
     time.sleep(3)
 
-def main():
-    """Main function."""
+if __name__ == "__main__":
     try:
         play()
     except KeyboardInterrupt:
         close()
     finally:
         screen.clear()
-
-main()
