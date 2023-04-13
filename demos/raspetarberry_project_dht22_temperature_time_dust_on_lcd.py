@@ -32,26 +32,25 @@ def get_humidity_and_temperature():
     return "{:.2f}%".format(humidity), "{:.2f}'C".format(temperature)
 
 # Sharp GP2Y1010AU0F Dust Sensor
-def get_air_quality_pm():
-    """Function gets PM2.5 density value from dust sensor."""
+def get_air_quality_particulate_matter():
+    """Function gets particulate matter PM2.5 density value from dust sensor."""
     return 0
 
-def get_air_quality_evaluation(density):
-    """Function returns a string evaluation based on PM 2.5 density."""
-    if 0 <= density <= 35:
-        return "Excellent"
-    elif 35 < density <= 75:
-        return "Average"
-    elif 75 < density <= 115:
-        return "Light poll"
-    elif 115 < density <= 150:
-        return "Moderate poll!"
-    elif 150 < density <= 250:
-        return "Heavy poll!!"
-    elif 250 < density <= 500:
-        return "Serious poll!!!"
-    else:
-        return "Unknown"
+def get_air_quality_index_evaluation(density):
+    """Function returns EPA AQI evaluation based on PM2.5 density."""
+    if 0 <= density < 12:
+        return "Good"
+    if 12 <= density < 35:
+        return "Moderate"
+    if 35 <= density < 55:
+        return "Unhealthy for Sensitive Groups"
+    if 55 <= density < 150:
+        return "Unhealthy"
+    if 150 <= density < 250:
+        return "Very Unhealthy"
+    if 250 <= density <= 500:
+        return "Hazardous"
+    return "Unknown"
 
 # LCD 1602
 def display_text_on_lcd_screen(line1, line2, time_sleep):
@@ -70,17 +69,17 @@ def display_date_and_time(rangerepeat):
 def display_data_from_sensors():
     """Function displays data gathered from sensors on LCD screen."""
     humidity, temperature = get_humidity_and_temperature()
-    pm = get_air_quality_pm()
-    evaluation = get_air_quality_evaluation(pm)
+    p_m = get_air_quality_particulate_matter()
+    evaluation = get_air_quality_index_evaluation(p_m)
     date_now = datetime.datetime.now()
     if date_now.minute == 0 or date_now.minute == 30:
         with open("/home/pi/Desktop/repos/PT_Library_Pi_UltimateRaspetarberry/temp.csv", "a") as mytemp:
             mytemp.write(f'{date_now},{temperature},{humidity}\n')
         with open("/home/pi/Desktop/repos/PT_Library_Pi_UltimateRaspetarberry/dust.csv", "a") as mydust:
-            mydust.write(f'{date_now},{pm}ug/m3\n')
+            mydust.write(f'{date_now},{p_m}ug/m3\n')
         time.sleep(60)
     display_text_on_lcd_screen(f'humidity: {humidity}', f'temp: {temperature}', 6)
-    display_text_on_lcd_screen(f'PM2.5: {pm} ug/m3', evaluation, 4)
+    display_text_on_lcd_screen(f'PM2.5: {p_m} ug/m3', evaluation, 4)
 
 def welcome():
     """Function displays welcome text on LCD screen."""
