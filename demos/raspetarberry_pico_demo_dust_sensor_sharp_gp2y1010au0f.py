@@ -1,20 +1,19 @@
-"""Raspetarberry Pi project to consume DHT22 sensor data and display it on LCD screen."""
+"""Raspetarberry Pi project to consume harp GP2Y1010AU0F Dust Sensor data and print it in terminal."""
 
-import time
 from machine import Pin,ADC
 import utime
 
 # Sharp GP2Y1010AU0F Dust Sensor
 
-#Select ADC input 0 (GPIO26)
+# Select ADC input 0 (GPIO26)
 COV_RATIO     =  0.2 #ug/mmm / mv
 NO_DUST_VOLTAGE = 400  #mv
 SYS_VOLTAGE = 3300
 
 class Dust:
     def __init__(self):
-         #Select ADC input 0 (GPIO26)
-        self.ADC_ConvertedValue = machine.ADC(0)
+         # Select ADC input 0 (GPIO26)
+        self.ADC_ConvertedValue = ADC(0)
         self.DIN = Pin(22,Pin.OUT)
         self.conversion_factor = 3.3 / (65535)
         self.flag_first = 0
@@ -77,16 +76,16 @@ def print_data_from_dust_sensor():
     p_m = round(get_air_quality_particulate_matter(), 1)
     evaluation = get_air_quality_index_evaluation(p_m)
     date_now = utime.localtime()
-    if date_now[4] in (0,5,10,15,20,25,30,35,40,45,50,55):
+    if date_now[4] in (0,15,30,45):
         date_str = f'{date_now[0]}-{'{:02d}'.format(date_now[1])}-{'{:02d}'.format(date_now[2])}'
         time_str = f'{'{:02d}'.format(date_now[3])}:{'{:02d}'.format(date_now[4])}:{'{:02d}'.format(date_now[5])}'
         print(f'{date_str} {time_str},{p_m},{evaluation}')
-        time.sleep(60)
+        utime.sleep(60)
 
 def welcome():
-    """Function prints welcome."""
+    """Function prints 'welcome'."""
     print("Welcome!")
-    time.sleep(3)
+    utime.sleep(3)
 
 def play():
     """Function plays the program loop."""
@@ -95,7 +94,6 @@ def play():
         try:
             print_data_from_dust_sensor()
         except RuntimeError as error:
-            # Errors occur often with DHT sensors as they are hard to read, so just keep going.
             print("Runtime error!")
             print(error.args[0])
             continue
@@ -103,12 +101,12 @@ def play():
             print("Exception error!")
             raise error
         finally:
-            time.sleep(0.5)
+            utime.sleep(0.5)
 
 def close():
-    """Function prints goodbye."""
+    """Function prints 'bye'."""
     print("Bye!")
-    time.sleep(3)
+    utime.sleep(3)
 
 if __name__ == "__main__":
     try:
