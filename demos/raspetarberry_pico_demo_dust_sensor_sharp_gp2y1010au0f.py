@@ -1,4 +1,4 @@
-"""Raspetarberry Pi project to consume harp GP2Y1010AU0F Dust Sensor data and print it in terminal."""
+"""Raspetarberry Pi project to consume Sharp GP2Y1010AU0F Dust Sensor data and print it in terminal."""
 
 from machine import Pin,ADC
 import utime
@@ -71,15 +71,18 @@ def get_air_quality_index_evaluation(density):
         return "Hazardous"
     return "Unknown"
 
-def print_data_from_dust_sensor():
+def process_data_from_dust_sensor():
     """Function prints data gathered from sensors."""
     p_m = round(get_air_quality_particulate_matter(), 1)
     evaluation = get_air_quality_index_evaluation(p_m)
     date_now = utime.localtime()
     if date_now[4] in (0,15,30,45):
-        date_str = f'{date_now[0]}-{'{:02d}'.format(date_now[1])}-{'{:02d}'.format(date_now[2])}'
-        time_str = f'{'{:02d}'.format(date_now[3])}:{'{:02d}'.format(date_now[4])}:{'{:02d}'.format(date_now[5])}'
-        print(f'{date_str} {time_str},{p_m},{evaluation}')
+        date_str = f'{str(date_now[0])[2:4]}-{'{:02d}'.format(date_now[1])}-{'{:02d}'.format(date_now[2])}'
+        time_str = f'{'{:02d}'.format(date_now[3])}:{'{:02d}'.format(date_now[4])}'
+        report = f'{date_str} {time_str},{p_m},{evaluation}'
+        print(report)
+        with open("dust.csv", "a") as mydust:
+            mydust.write(f'{report}\n')
         utime.sleep(60)
 
 def welcome():
@@ -92,7 +95,7 @@ def play():
     welcome()
     while True:
         try:
-            print_data_from_dust_sensor()
+            process_data_from_dust_sensor()
         except RuntimeError as error:
             print("Runtime error!")
             print(error.args[0])
