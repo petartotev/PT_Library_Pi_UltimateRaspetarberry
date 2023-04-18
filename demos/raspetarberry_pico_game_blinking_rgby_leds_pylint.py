@@ -1,4 +1,4 @@
-"""This is python script that contains a game called RecalLED"""
+"""This python script contains a game called RemembeRGBY"""
 
 # Open Thonny IDE > Configure Interpreter > MicroPython (Raspberry Pi Pico) . COM3
 # In Thonny > Tools > Manage Packages... > Install picozero from PyPi
@@ -131,7 +131,7 @@ try:
     while True:
         turn_off_leds()
         turn_on_leds_in_sequence(1)
-        print("Welcome to 'RECAL`LED' game!")
+        print("Welcome to 'RemembeRGBY'!")
         GAME_DIFFICULTY = set_difficulty()
         print(f'Difficulty is {GAME_DIFFICULTY}!')
         sleep(1)
