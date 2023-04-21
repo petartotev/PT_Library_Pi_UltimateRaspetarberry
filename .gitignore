@@ -134,3 +134,4 @@ dmypy.json
 credentials.py
 # PT: Ignore bin folder
 /bin
+**/bin
