@@ -133,9 +133,9 @@ def main():
                 steps(deg_curr if deg_curr < 1024 else -(2048 - deg_curr))
                 sys.exit("Keyboard interrupt! Exit!")
             except:
+                steps(deg_curr if deg_curr < 1024 else -(2048 - deg_curr))
                 deg_curr = 0
                 print("ERROR: Request to Weather API failed!")
-                steps(deg_curr if deg_curr < 1024 else -(2048 - deg_curr))
                 time.sleep(10)
                 continue
             time_taken = datetime.datetime.utcfromtimestamp(int(data["dt"]))
