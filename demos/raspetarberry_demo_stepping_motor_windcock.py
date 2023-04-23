@@ -1,4 +1,4 @@
-'''Windock'''
+'''Windcock'''
 
 import time
 import http.client
@@ -48,26 +48,19 @@ STEP_COUNT = STEP_COUNT_2
 def steps(n_b):
     '''Steps'''
     step_counter = 0
-    if n_b < 0:
-        sign = -1
-    else:
-        sign = 1
+    sign = -1 if n_b < 0 else 1
     n_b = sign * n_b * 2 # times 2 because half-step
     print(f'n_bsteps {n_b} and sign {sign}')
     for _ in range(n_b):
         for pin in range(4):
             xpin = StepPins[pin]
-            if Seq[step_counter][pin]!=0:
-                GPIO.output(xpin, True)
-            else:
-                GPIO.output(xpin, False)
+            GPIO.output(xpin, True if Seq[step_counter][pin]!=0 else False)
         step_counter += sign
     # If we reach the end of the sequence => start again
         if step_counter == STEP_COUNT:
             step_counter = 0
         if step_counter < 0:
             step_counter = STEP_COUNT - 1
-        # Wait before moving on
         time.sleep(WAIT_TIME)
 
 # OPEN WEATHER API
@@ -88,15 +81,11 @@ def get_weather_api_response(lat, lon, key_weather_api):
     conn = http.client.HTTPSConnection(URL_OPEN_WEATHER_API)
     conn.request("GET", url_weather_api)
     response = conn.getresponse()
-    data = response.read()
-    data_decoded = data.decode("utf-8")
-    return json.loads(data_decoded)
+    return json.loads(response.read().decode("utf-8"))
 
 def extract_wind_from_weather_api_response(response):
     '''Extract wind from Weather API response'''
-    wind_direction = response["wind"]["deg"]
-    wind_speed = response["wind"]["speed"]
-    return wind_direction, wind_speed
+    return response["wind"]["deg"], response["wind"]["speed"]
 
 def extract_time_from_weather_api_response(response):
     '''Extract time from Weather API response'''
@@ -110,89 +99,64 @@ def convert_unit_to_degree(unit):
     '''Convert unit to degree'''
     return round((360 * round(unit)) / 2048)
 
-def get_lat_and_lon_by_ip_address():
+def get_lat_and_long_by_ip_address():
     '''Get latitude and longitude based on current public ip address'''
     ip_public = requests.get(URL_API_IPIFY_ORG, timeout=10).text
     geo = geocoder.ip(ip_public)
-    lat = geo.latlng[0]
-    lon = geo.latlng[1]
-    return lat, lon
+    return geo.latlng[0], geo.latlng[1]
 
 def get_coordinates_from_run_args_or_ip():
-    '''Get coordinates from run arguments or current public ip address'''
-    if len(sys.argv) > 1:
-        city = str(sys.argv[1])
-    else:
-        city = "Undefined"
+    '''Get coordinates from run arguments or from current public ip address'''
+    city = str(sys.argv[1]) if len(sys.argv) > 1 else "Undefined"
     if city == "CherniVruh":
-        lat = 42.56378836361624
-        lon =  23.278416348642256
-    elif city == "Sofia":
-        lat = 42.68232568553703
-        lon = 23.335369831287874
-    elif city == "Burgas":
-        lat = 42.493969995866784
-        lon = 27.46136420793039
-    else:
-        response = get_lat_and_lon_by_ip_address()
-        lat = response[0]
-        lon = response[1]
-    return lat, lon
+        return 42.56378836361624, 23.278416348642256
+    if city == "Sofia":
+        return 42.68232568553703, 23.335369831287874
+    if city == "Burgas":
+        return 42.493969995866784, 27.46136420793039
+    response = get_lat_and_long_by_ip_address()
+    return response[0], response[1]
 
 # PROGRAM
 
 def main():
     '''Main program'''
     coords = get_coordinates_from_run_args_or_ip()
-    lat = coords[0]
-    lon = coords[1]
+    print(f'Latitude is {coords[0]}, Longitude is {coords[1]}.\n')
     deg_curr = 0
-    print(f'Lat is {lat}, Lon is {lon}.')
-    print('~')
     try:
         while True:
             #print(f'deg_curr before update: {deg_curr}')
             try:
-                data = get_weather_api_response(lat, lon, OPEN_WEATHER_API_KEY)
+                data = get_weather_api_response(coords[0], coords[1], OPEN_WEATHER_API_KEY)
             except KeyboardInterrupt:
-                if deg_curr < 1024:
-                    steps(deg_curr)
-                else:
-                    steps(-(2048 - deg_curr))
                 sys.exit("Keyboard interrupt! Exit!")
-            except:
-                if (deg_curr < 1024):
-                    steps(deg_curr)
-                else:
-                    steps(-(2048 - deg_curr))
+            except Exception:
                 deg_curr = 0
                 print("ERROR: Request to Weather API failed!")
                 time.sleep(10)
                 continue
+            finally:
+                steps(deg_curr if deg_curr < 1024 else -(2048 - deg_curr))
             time_taken = datetime.datetime.utcfromtimestamp(int(data["dt"]))
             hour_taken = time_taken.hour + get_offset_from_utc_to_local()
             minute_taken = time_taken.minute
-            print('Data taken at ' + f'{hour_taken:0>2}' + ':' + f'{minute_taken:0>2}')
+            print(f'Wind data taken at {hour_taken:0>2}:{minute_taken:0>2}')
             wind_data = extract_wind_from_weather_api_response(data)
-            speed_data = wind_data[1]
-            print(f'New Speed: {speed_data} mps')
+            print(f'New Speed: {wind_data[1]} mps')
             deg_data = round(wind_data[0])
-            #deg_data = random.randrange(0, 360, 1)
             deg_new = convert_degree_to_unit(deg_data)
-            print(f'New Direction Degree: {deg_data} degrees')
-            print(f'New Direction Unit: {deg_new} units')
-            if deg_new > deg_curr:
+            print(f'New Direction: {deg_data}° / {deg_new} units')
+            if deg_new >= deg_curr:
                 diff = deg_new - deg_curr
                 steps(-diff)
                 deg_curr = deg_curr + diff
-            elif deg_new < deg_curr:
+            else:
                 diff = deg_curr - deg_new
                 steps(diff)
                 deg_curr = deg_curr - diff
-            print(f'Current Direction Degree: {convert_unit_to_degree(deg_curr)}')
-            print(f'Current Direction Unit: {deg_curr}')
+            print(f'Current Direction: {convert_unit_to_degree(deg_curr)}° / {deg_curr} units\n')
             time.sleep(60)
-            print('~')
     except KeyboardInterrupt:
         if deg_curr < 1024:
             steps(deg_curr)
@@ -201,9 +165,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-#if __name__ == '__main__' :
-#	hasRun=False
-#while not hasRun:
-#	steps(256)
-#	hasRun=True
