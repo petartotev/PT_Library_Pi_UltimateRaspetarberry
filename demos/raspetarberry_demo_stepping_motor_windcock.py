@@ -130,14 +130,14 @@ def main():
             try:
                 data = get_weather_api_response(coords[0], coords[1], OPEN_WEATHER_API_KEY)
             except KeyboardInterrupt:
+                steps(deg_curr if deg_curr < 1024 else -(2048 - deg_curr))
                 sys.exit("Keyboard interrupt! Exit!")
-            except Exception:
+            except:
                 deg_curr = 0
                 print("ERROR: Request to Weather API failed!")
+                steps(deg_curr if deg_curr < 1024 else -(2048 - deg_curr))
                 time.sleep(10)
                 continue
-            finally:
-                steps(deg_curr if deg_curr < 1024 else -(2048 - deg_curr))
             time_taken = datetime.datetime.utcfromtimestamp(int(data["dt"]))
             hour_taken = time_taken.hour + get_offset_from_utc_to_local()
             minute_taken = time_taken.minute
