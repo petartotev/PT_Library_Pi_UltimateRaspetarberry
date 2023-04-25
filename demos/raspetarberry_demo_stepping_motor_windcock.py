@@ -182,7 +182,7 @@ def main():
             print(f'New Speed: {wind_data[1]} mps')
             dir_data_degree = round(wind_data[0])
             dir_new_unit = convert_degree_to_unit(dir_data_degree)
-            print(f'New Direction: {dir_data_degree}° / {dir_new_unit} units')
+            print(f'New Direction: {dir_data_degree}° ({dir_new_unit} units)')
             if dir_new_unit >= dir_curr_unit:
                 diff = dir_new_unit - dir_curr_unit
                 steps(-diff)
@@ -193,10 +193,11 @@ def main():
                 dir_curr_unit = dir_curr_unit - diff
             dir_curr_degree = convert_unit_to_degree(dir_curr_unit)
             abbr = get_direction_abbr_by_degree(dir_curr_degree)
-            print(f'Current Direction: {dir_curr_degree}° {abbr} ({dir_curr_unit} units)\n')
-            if datetime.datetime.now().minute in (0,30):
+            print(f'Current Direction: {dir_curr_degree}° ({dir_curr_unit} units), {abbr}\n')
+            date = datetime.datetime.now()
+            if date.minute in (0,30):
                 with open("wind.csv", "a", encoding="utf-8") as mywind:
-                    mywind.write(f'{dir_curr_degree}°,{dir_curr_unit} units,{abbr}\n')
+                    mywind.write(f'{date},{dir_curr_degree}°,{dir_curr_unit} units,{abbr}\n')
             time.sleep(60)
     except KeyboardInterrupt:
         if dir_curr_unit < 1024:
