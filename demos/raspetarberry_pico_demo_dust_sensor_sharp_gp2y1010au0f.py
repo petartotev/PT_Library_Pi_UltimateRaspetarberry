@@ -81,7 +81,7 @@ def process_data_from_dust_sensor():
         time_str = f'{'{:02d}'.format(date_now[3])}:{'{:02d}'.format(date_now[4])}'
         report = f'{date_str} {time_str},{p_m},{evaluation}'
         print(report)
-        with open("dust.csv", "a") as mydust:
+        with open("dust.csv", "a", encoding="utf-8") as mydust:
             mydust.write(f'{report}\n')
         utime.sleep(60)
 
