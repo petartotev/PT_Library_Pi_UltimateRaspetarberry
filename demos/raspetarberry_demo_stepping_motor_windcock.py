@@ -178,9 +178,9 @@ def main():
             hour_taken = time_taken.hour + get_offset_from_utc_to_local()
             minute_taken = time_taken.minute
             print(f'Wind data taken at {hour_taken:0>2}:{minute_taken:0>2}')
-            wind_data = extract_wind_from_weather_api_response(data)
-            print(f'New Speed: {wind_data[1]} mps')
-            dir_data_degree = round(wind_data[0])
+            data = extract_wind_from_weather_api_response(data)
+            print(f'New Speed: {data[1]} mps')
+            dir_data_degree = round(data[0])
             dir_new_unit = convert_degree_to_unit(dir_data_degree)
             print(f'New Direction: {dir_data_degree}° ({dir_new_unit} units)')
             if dir_new_unit >= dir_curr_unit:
@@ -191,13 +191,13 @@ def main():
                 diff = dir_curr_unit - dir_new_unit
                 steps(diff)
                 dir_curr_unit = dir_curr_unit - diff
-            dir_curr_degree = convert_unit_to_degree(dir_curr_unit)
-            abbr = get_direction_abbr_by_degree(dir_curr_degree)
-            print(f'Current Direction: {dir_curr_degree}° ({dir_curr_unit} units), {abbr}\n')
+            dir_curr_degr = convert_unit_to_degree(dir_curr_unit)
+            abbr = get_direction_abbr_by_degree(dir_curr_degr)
+            print(f'Current Direction: {dir_curr_degr}° ({dir_curr_unit} units), {abbr}\n')
             date = datetime.datetime.now()
-            if date.minute in (0,30):
-                with open("wind.csv", "a", encoding="utf-8") as mywind:
-                    mywind.write(f'{date},{dir_curr_degree}°,{dir_curr_unit} units,{abbr}\n')
+            if date.minute in (0,15,30,45):
+                with open("wind.csv", "a", encoding="utf-8") as f_w:
+                    f_w.write(f'{date},{data[1]}mps,{dir_curr_degr}°,{dir_curr_unit}/2048,{abbr}\n')
             time.sleep(60)
     except KeyboardInterrupt:
         if dir_curr_unit < 1024:
