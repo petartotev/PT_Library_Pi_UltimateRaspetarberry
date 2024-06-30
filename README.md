@@ -14,6 +14,19 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 - import multiprocessing (with lock)
 	- demos/raspetarberryPiDemoLCD1602AndTempSensorDHT11_01.py
 
+## Known Issues
+
+### Raspberry Pi Zero W Clock not accurate!
+
+https://stackoverflow.com/questions/71868313/how-to-sync-raspberry-pi-system-clock
+
+1. Connect Raspberry Pi Zero W to the Internet
+2. Execute the following command in the Linux Terminal:
+```
+sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
+```
+3. SUCCESS: RPi Clock gets set just fine!
+
 ## Sources of Information
 [Good article on Multiprocessing](https://analyticsindiamag.com/run-python-code-in-parallel-using-multiprocessing/#:~:text=Multiprocessing%20in%20Python%20enables%20the,run%20tasks%2Fprocesses%20in%20parallel.&text=Multiprocessing%20enables%20the%20computer%20to,involve%20a%20lot%20of%20computation.)  
 [Stack Overflow article on Multiprocessing with Lock](https://stackoverflow.com/questions/28267972/python-multiprocessing-locks)  
