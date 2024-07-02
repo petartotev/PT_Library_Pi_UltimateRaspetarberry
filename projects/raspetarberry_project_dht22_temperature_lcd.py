@@ -22,7 +22,7 @@ PIN_SIGNAL = 4 # GPIO4 (7)
 def get_humidity_and_temperature():
     """Function gets data from DHT22 sensor."""
     humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT22, PIN_SIGNAL)
-    return "{:.2f}%".format(humidity), "{:.2f}'C".format(temperature)
+    return f"{humidity:.2f}%", f"{temperature:.2f}'C"
 
 # LCD 1602
 def display_text_on_lcd_screen(line1, line2, time_sleep):
@@ -43,7 +43,10 @@ def display_data_from_sensors():
     humidity, temperature = get_humidity_and_temperature()
     date_now = datetime.datetime.now()
     if date_now.minute == 0 or date_now.minute == 30:
-        with open("/home/pi/Desktop/repos/PT_Library_Pi_UltimateRaspetarberry/temp.csv", "a") as mytemp:
+        with open(
+            file="/home/pi/Desktop/repos/PT_Library_Pi_UltimateRaspetarberry/temp.csv",
+            mode="a",
+            encoding="utf-8") as mytemp:
             mytemp.write(f'{date_now},{temperature},{humidity}\n')
         time.sleep(60)
     display_text_on_lcd_screen(f'humidity: {humidity}', f'temp: {temperature}', 6)
@@ -69,7 +72,13 @@ def play():
             continue
         except Exception as error:
             print("Exception error!")
-            raise error
+            #raise error
+            with open(
+                file="/home/pi/Desktop/repos/PT_Library_Pi_UltimateRaspetarberry/temp.csv",
+                mode="a",
+                encoding="utf-8") as mytemp:
+                mytemp.write(error.args[0])
+            continue
         finally:
             time.sleep(0.5)
 
