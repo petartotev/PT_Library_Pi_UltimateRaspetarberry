@@ -51,6 +51,10 @@ systemd-journalid[87]: Failed to send READY=1 notification message: Transport en
 
 ✅ SUCCESS: Take the SD card out of your Raspberry Pi, then plug it in again to get things right!
 
+### Raspberry Pico Not Read When Connected With HDMI Cable
+
+Use Data cable, not Charging cable!
+
 ## Links
 - [Good article on Multiprocessing](https://analyticsindiamag.com/run-python-code-in-parallel-using-multiprocessing/#:~:text=Multiprocessing%20in%20Python%20enables%20the,run%20tasks%2Fprocesses%20in%20parallel.&text=Multiprocessing%20enables%20the%20computer%20to,involve%20a%20lot%20of%20computation.)  
 - [Stack Overflow article on Multiprocessing with Lock](https://stackoverflow.com/questions/28267972/python-multiprocessing-locks)  

@@ -1,0 +1,25 @@
+>>> %Run -c $EDITOR_CONTENT
+
+MPY: soft reboot
+Is WIFI connected: True
+
+Currently, there are 12 astronauts on ISS. Their names are:
+Oleg Kononenko
+Nikolai Chub
+Tracy Caldwell Dyson
+Matthew Dominick
+Michael Barratt
+Jeanette Epps
+Alexander Grebenkin
+Butch Wilmore
+Sunita Williams
+Li Guangsu
+Li Cong
+Ye Guangfu
+
+Here is the url to the Astronomy Picture of the Day, provided by Nasa API:
+date: 2024-07-02
+title: NGC 602: Oyster Star Cluster
+explanation: The clouds may look like an oyster...
+url: https://apod.nasa.gov/apod/image/2407/Ngc602_Hubble_960.jpg
+>>> 

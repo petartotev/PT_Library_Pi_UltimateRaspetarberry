@@ -30,8 +30,8 @@ def blink():
     pwm_yellow.duty_u16(0)
 
 
-while(True):
-	blink()
+while True:
+    blink()
 
 
 # import utime
