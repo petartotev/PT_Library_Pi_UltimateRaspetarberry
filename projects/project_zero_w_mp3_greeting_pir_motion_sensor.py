@@ -1,4 +1,4 @@
-'''This python script plays a mp3 greeting when a PIR sensor scans a movement'''
+"""Python script plays a MP3 greeting when a PIR sensor scans any movement"""
 
 import time
 import datetime
@@ -23,23 +23,23 @@ greetings = [
     'how_is_it_going']
 
 def blink_red_light():
-    '''Blink Red Light'''
+    """Blink Red Light"""
     led_red.on()
     time.sleep(1)
     led_red.off()
     time.sleep(1)
 
 def play_mp3_file(file_path):
-    '''Play MP3 File'''
+    """Play MP3 File"""
     os.system(f'omxplayer -p -o hdmi {file_path}')
 
 def get_random_greeting_mp3_file_path():
-    '''Get Random Greeting Mp3 File Path'''
+    """Get Random Greeting Mp3 File Path"""
     random_song = random.choice(greetings)
     return '/home/pi/Desktop/greetings/' + random_song
 
 def generate_mp3_file_from_string(string, directory, file_name):
-    '''Generate MP3 File From String'''
+    """Generate MP3 File From String"""
     if directory[-1] != "/":
         directory = directory + "/"
     if ".mp3" not in file_name:
@@ -51,7 +51,7 @@ def generate_mp3_file_from_string(string, directory, file_name):
     return mp3_file_path
 
 def generate_mp3_files_from_greetings():
-    '''Generate MP3 Files From Greetings'''
+    """Generate MP3 Files From Greetings"""
     for greeting in greetings:
         generate_mp3_file_from_string(greeting, '/home/pi/Desktop/', greeting + '.mp3')
 

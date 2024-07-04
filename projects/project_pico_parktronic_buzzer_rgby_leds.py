@@ -1,4 +1,4 @@
-'''Pico Parktronic'''
+"""Pico Parktronic"""
 
 from machine import Pin
 import utime
@@ -16,12 +16,12 @@ trigger = Pin(3, Pin.OUT)
 echo = Pin(2, Pin.IN)
 
 def set_buzzers(val1, val2):
-    '''Set buzzers'''
+    """Set buzzers"""
     buzzer.value(val1)
     buzzer2.value(val2)
 
 def turn_leds_off():
-    '''Turn leds off'''
+    """Turn leds off"""
     blueLed.off()
     greenLed.off()
     yellowLed.off()
@@ -45,7 +45,7 @@ def turn_on_leds_in_sequence(count = 5):
         yellowLed.off()
 
 def turn_led_on_based_on_distance(dist):
-    '''Turn leds on based on distance'''
+    """Turn leds on based on distance"""
     turn_leds_off()
     if dist <= 30:
         redLed.on()
@@ -66,7 +66,7 @@ def turn_led_on_based_on_distance(dist):
         set_buzzers(0,0)
 
 def ultra():
-    '''Ultra'''
+    """Ultra"""
     trigger.low()
     utime.sleep_us(2)
     trigger.high()
@@ -82,7 +82,7 @@ def ultra():
     print("The distance from object is ",distance,"cm")
 
 def main():
-    '''Main program'''
+    """Main program"""
     turn_leds_off()
     while True:
         ultra()

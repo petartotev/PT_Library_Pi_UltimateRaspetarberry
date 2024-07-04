@@ -1,10 +1,14 @@
-from gpiozero import LEDBoard, OutputDeviceError, LEDCollection, Button
+"""Python script implements a Digital Dice using 7-segment display"""
+
 import time
 import random
+from gpiozero import LEDBoard, OutputDeviceError, LEDCollection, Button
 
 # Class is copied from:
 # https://www.stuffaboutcode.com/2016/10/raspberry-pi-7-segment-display-gpiozero.html
+
 class SevenSegmentDisplay(LEDBoard):
+    """Seven Segment Display Class"""
     def __init__(self, *pins, **kwargs):
         # 7 segment displays must have 7 or 8 pins
         if len(pins) < 7 or len(pins) > 8:
@@ -63,6 +67,7 @@ class SevenSegmentDisplay(LEDBoard):
         super(SevenSegmentDisplay, self).__init__(*pins, pwm=pwm, active_high=active_high, initial_value=initial_value)
 
     def display(self, char):
+        """Display"""
         char = str(char).upper()
         if len(char) > 1:
             raise ValueError('only a single character can be displayed')
@@ -73,24 +78,27 @@ class SevenSegmentDisplay(LEDBoard):
             self[led].value = layout[led]
 
     def display_hex(self, hexnumber):
+        """Display Hex"""
         self.display(hex(hexnumber)[2:])
 
     @property
     def decimal_point(self):
+        """Get Decimal Point"""
         # does the 7seg display have a decimal point (i.e pin 8)
         if len(self) > 7:
-            return self[7].value 
-        else:
-            raise OutputDeviceError('there is no 8th pin for the decimal point')
+            return self[7].value
+        raise OutputDeviceError('there is no 8th pin for the decimal point')
 
     @decimal_point.setter
     def decimal_point(self, value):
+        """Set Decimal Point"""
         if len(self) > 7:
             self[7].value = value
         else:
             raise OutputDeviceError('there is no 8th pin for the decimal point')    
 
     def set_char_layout(self, char, layout):
+        """Set Char Layout"""
         char = str(char).upper()
         if len(char) != 1:
             raise ValueError('only a single character can be used in a layout')
@@ -106,13 +114,13 @@ btnG = Button(26)
 listNums = [1, 2, 3, 4, 5, 6]
 
 try:
-	while(True):
-		if btnG.is_pressed:
-			randomNum = random.choice(listNums)
-			seven_seg.display(str(randomNum))
-			time.sleep(5)
-			seven_seg.display(" ")
+    while True:
+        if btnG.is_pressed:
+            randomNum = random.choice(listNums)
+            seven_seg.display(str(randomNum))
+            time.sleep(5)
+            seven_seg.display(" ")
 except KeyboardInterrupt:
-	seven_seg.display(" ")
+    seven_seg.display(" ")
 finally:
-	seven_seg.display(" ")
+    seven_seg.display(" ")

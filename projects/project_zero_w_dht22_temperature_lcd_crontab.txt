@@ -27,4 +27,4 @@
 # @reboot sleep 75 && env DISPLAY=:0 vlc -LZ "/home/.../MySongs"
 # @reboot sleep 75 && cd /home/...c/WorkStationLocker.PythonApp >> /home/.../logs.txt && python3 program.py >> /home/.../logs.txt
 
-@reboot sleep 75 && python3 /home/.../raspetarberry_project_dht22_temperature_lcd.py
+@reboot sleep 75 && python3 /home/.../project_zero_w_dht22_temperature_lcd.py
