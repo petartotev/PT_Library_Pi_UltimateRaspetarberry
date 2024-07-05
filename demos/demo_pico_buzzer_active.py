@@ -8,7 +8,7 @@ buzzer = Pin(11, Pin.OUT)
 
 while True:
     if button.value() == 0:
-        print("button pressed")
+        print("Button pressed!")
         buzzer.value(1)
         time.sleep(0.1)
     else:

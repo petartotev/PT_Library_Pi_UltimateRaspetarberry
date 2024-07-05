@@ -1,3 +1,5 @@
+"""Python script implements DHT11 Temperature Sensor using LCD 1602 Screen"""
+
 import time
 import multiprocessing
 import Adafruit_DHT
@@ -8,110 +10,117 @@ screen = LCD()
 
 # pinVcc = 3V3 (1)
 # pinGnd = GND (9)
-pinSignal = 17 # GPIO17 (11)
+PIN_SIGNAL = 17 # GPIO17 (11)
 
-errorMessageGetDataDHT11Runtime = "ERROR: Runtime error while executing getDataFromDHT11!"
-errorMessageGetDataDHT11 = "ERROR: Exception while executing getDataFromDHT11!"
-errorMessageDisplayTime = "ERROR: Either datetime.now() or parsing its result failed while executing displayTime(WithLock)!"
-errorMessageDisplayDataDHT11 = "ERROR: Either getDataFromDHT11Once() or parsing its result failed while executing displayDataFromDHT11(WithLock)!"
+ERROR_MESSAGE_GET_DATA_DHT11_RUNTIME = "ERROR: Runtime error while executing get_dht11_data!"
+ERROR_MESSAGE_GET_DATA_DHT11 = "ERROR: Exception while executing get_dht11_data!"
+ERROR_MESSAGE_DISPLAY_TIME = "ERROR: datetime.now() or parsing it failed on displayTime(WithLock)!"
+ERROR_MESSAGE_DISPLAY_DATA_DHT11 = "ERROR: Either get_dht11_data_once() or parsing it failed on display_dht11_data(WithLock)!"
 
-errDisplayTime = "ERR:displayTime"
-errDisplayDHT11 = "ERR:displayDHT11"
+ERR_DISPLAY_TIME = "ERR:displayTime"
+ERR_DISPLAY_DHT11 = "ERR:displayDHT11"
 
 lock = multiprocessing.Lock()
 
-def runDemo():
-	try:
-		while(True):
-			#displayTime(True)
-			#displayDataFromDHT11(False)
-			process1 = multiprocessing.Process(target=displayTimeWithLock, args=(True, lock))
-			process2 = multiprocessing.Process(target=displayDataFromDHT11WithLock, args=(False, lock))
-			process1.start()
-			process2.start()
-			time.sleep(0.95)
-	except KeyboardInterrupt:
-			screen.clear()
+def run_demo():
+    """Run demo"""
+    try:
+        while True:
+            #displayTime(True)
+            #display_dht11_data(False)
+            process1 = multiprocessing.Process(target=display_time_with_lock, args=(True, lock))
+            process2 = multiprocessing.Process(target=display_dht11_data_with_lock, args=(False, lock))
+            process1.start()
+            process2.start()
+            time.sleep(0.95)
+    except KeyboardInterrupt:
+        screen.clear()
 
-def getDataFromDHT11Once():
-	try:
-		humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, pinSignal)
-		return humidity, temperature
-	except RuntimeError as error:
-		print(errorMessageGetDataDHT11Runtime)
-	except Exception as error:
-		print(errorMessageGetDataDHT11)
+def get_dht11_data_once():
+    """Get data from DHT11 only once"""
+    try:
+        humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, PIN_SIGNAL)
+        return humidity, temperature
+    except RuntimeError as error:
+        print(ERROR_MESSAGE_GET_DATA_DHT11_RUNTIME + f' {str(error)}')
+    except Exception as error:
+        print(ERROR_MESSAGE_GET_DATA_DHT11 + f' {str(error)}')
 
-def getDataFromDHT11():
-	while True:
-		try:
-			humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, pinSignal)
-			return humidity, temperature
-		except RuntimeError as error:
-			# Errors happen fairly often, DHT's are hard to read, just keep going.
-			print(errorMessageGetDataDHT11Runtime)
-			print(error.args[0])
-			continue
-		except Exception as error:
-			print(errorMessageGetDataDHT11)
-			raise error
-		finally:
-			time.sleep(5)
+def get_dht11_data():
+    """Get data from DHT11"""
+    while True:
+        try:
+            humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, PIN_SIGNAL)
+            return humidity, temperature
+        except RuntimeError as error:
+            # Errors happen fairly often, DHT's are hard to read, just keep going.
+            print(ERROR_MESSAGE_GET_DATA_DHT11_RUNTIME)
+            print(error.args[0])
+            continue
+        except Exception as error:
+            print(ERROR_MESSAGE_GET_DATA_DHT11)
+            raise error
+        finally:
+            time.sleep(5)
 
-def displayTime(isOnLine1):
-	lineToDisplayOn = 1 if isOnLine1 else 2
-	try:
-		datetimenow = str(datetime.now()).replace('-','')
-		textDate = datetimenow[2:8]
-		textTime = datetimenow[9:17]
-		screen.text(textTime + '  ' + textDate, lineToDisplayOn)
-		print(textTime + '  ' + textDate)
-	except:
-		screen.text(errDisplayTime, lineToDisplayOn)
-		print(errDisplayTime)
+def display_time(is_on_line_1):
+    """Display Time"""
+    line_to_display_on = 1 if is_on_line_1 else 2
+    try:
+        datetimenow = str(datetime.now()).replace('-','')
+        text_date = datetimenow[2:8]
+        text_time = datetimenow[9:17]
+        screen.text(text_time + '  ' + text_date, line_to_display_on)
+        print(text_time + '  ' + text_date)
+    except Exception:
+        screen.text(ERR_DISPLAY_TIME, line_to_display_on)
+        print(ERR_DISPLAY_TIME)
 
-def displayTimeWithLock(isOnLine1, lock):
-	lineToDisplayOn = 1 if isOnLine1 else 2
-	try:
-		datetimenow = str(datetime.now()).replace('-','')
-		textDate = datetimenow[2:8]
-		textTime = datetimenow[9:17]
-		with lock:
-			try:
-				screen.text(textTime + '  ' + textDate, lineToDisplayOn)
-				print(textTime + '  ' + textDate)
-			except:
-				screen.text(errDisplayTime, lineToDisplayOn)
-				print(errDisplayTime)
-	except:
-		print(errorMessageDisplayTime)
+def display_time_with_lock(is_on_line_1, lock_it):
+    """Display Time with Lock"""
+    line_to_display_on = 1 if is_on_line_1 else 2
+    try:
+        datetimenow = str(datetime.now()).replace('-','')
+        text_date = datetimenow[2:8]
+        text_time = datetimenow[9:17]
+        with lock_it:
+            try:
+                screen.text(text_time + '  ' + text_date, line_to_display_on)
+                print(text_time + '  ' + text_date)
+            except Exception:
+                screen.text(ERR_DISPLAY_TIME, line_to_display_on)
+                print(ERR_DISPLAY_TIME)
+    except Exception:
+        print(ERROR_MESSAGE_DISPLAY_TIME)
 
-def displayDataFromDHT11(isOnLine1):
-	lineToDisplayOn = 1 if isOnLine1 else 2
-	try:
-		humidity, temperature = getDataFromDHT11Once()
-		textTemp = "{:.1f}`C".format(temperature)
-		textHumidity = "{}%".format(humidity)
-		screen.text(textTemp + ', ' + textHumidity, lineToDisplayOn)
-		print(textTemp + ', ' + textHumidity)
-	except:
-		screen.text(errDisplayDHT11, lineToDisplayOn)
-		print(errDisplayDHT11)
+def display_dht11_data(is_on_line_1):
+    """Display DHT11 Data"""
+    line_to_display_on = 1 if is_on_line_1 else 2
+    try:
+        humidity, temperature = get_dht11_data_once()
+        text_temp = "{:.1f}`C".format(temperature)
+        text_humidity = "{}%".format(humidity)
+        screen.text(text_temp + ', ' + text_humidity, line_to_display_on)
+        print(text_temp + ', ' + text_humidity)
+    except Exception:
+        screen.text(ERR_DISPLAY_DHT11, line_to_display_on)
+        print(ERR_DISPLAY_DHT11)
 
-def displayDataFromDHT11WithLock(isOnLine1, lock):
-	lineToDisplayOn = 1 if isOnLine1 else 2
-	try:
-		humidity, temperature = getDataFromDHT11Once()
-		textTemp = "{:.1f}`C".format(temperature)
-		textHumidity = "{}%".format(humidity)
-		with lock:
-			try:
-				screen.text(textTemp + ', ' + textHumidity, lineToDisplayOn)
-				print(textTemp + ', ' + textHumidity)
-			except:
-				screen.text(errDisplayDHT11, lineToDisplayOn)
-				print(errDisplayDHT11)
-	except:
-		print(errorMessageDisplayDataDHT11)
+def display_dht11_data_with_lock(is_on_line_1, lock_it):
+    """Display DHT11 Data with Lock"""
+    line_to_display_on = 1 if is_on_line_1 else 2
+    try:
+        humidity, temperature = get_dht11_data_once()
+        text_temp = "{:.1f}`C".format(temperature)
+        text_humidity = "{}%".format(humidity)
+        with lock_it:
+            try:
+                screen.text(text_temp + ', ' + text_humidity, line_to_display_on)
+                print(text_temp + ', ' + text_humidity)
+            except Exception:
+                screen.text(ERR_DISPLAY_DHT11, line_to_display_on)
+                print(ERR_DISPLAY_DHT11)
+    except Exception:
+        print(ERROR_MESSAGE_DISPLAY_DATA_DHT11)
 
-runDemo()
+run_demo()

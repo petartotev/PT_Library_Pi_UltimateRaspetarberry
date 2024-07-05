@@ -1,3 +1,5 @@
+"""Python script implements Stepping Motor"""
+
 import time
 import RPi.GPIO as GPIO
 
@@ -6,22 +8,22 @@ GPIO.setmode(GPIO.BCM)
 StepPins = [24,25,8,7]
 
 for pin in StepPins:
-        GPIO.setup(pin,GPIO.OUT)
-        GPIO.output(pin, False)
+    GPIO.setup(pin,GPIO.OUT)
+    GPIO.output(pin, False)
 
-WaitTime = 0.001
+WAIT_TIME = 0.001
 
-StepCount1 = 4
+STEP_COUNT_1 = 4
 Seq1 = []
-Seq1 = [i for i in range(0, StepCount1)]
+Seq1 = [i for i in range(0, STEP_COUNT_1)]
 Seq1[0] = [1,0,0,0]
 Seq1[1] = [0,1,0,0]
 Seq1[2] = [0,0,1,0]
 Seq1[3] = [0,0,0,1]
 
-StepCount2 = 8
+STEP_COUNT_2 = 8
 Seq2 = []
-Seq2 = [i for i in range(0, StepCount2)]
+Seq2 = [i for i in range(0, STEP_COUNT_2)]
 Seq2[0] = [1,0,0,0]
 Seq2[1] = [1,1,0,0]
 Seq2[2] = [0,1,0,0]
@@ -32,46 +34,48 @@ Seq2[6] = [0,0,0,1]
 Seq2[7] = [1,0,0,1]
 
 Seq = Seq2
-StepCount = StepCount2
+STEP_COUNT = STEP_COUNT_2
 
 def steps(nb):
-        StepCounter = 0
-        if nb<0: sign=-1
-        else: sign=1
-        nb=sign*nb*2 #times 2 because half-step
-        print("nbsteps {} and sign {}".format(nb,sign))
-        for i in range(nb):
-                for pin in range(4):
-                        xpin = StepPins[pin]
-                        if Seq[StepCounter][pin]!=0:
-                                GPIO.output(xpin, True)
-                        else:
-                                GPIO.output(xpin, False)
-                StepCounter += sign
-        # If we reach the end of the sequence
-        # start again
-                if (StepCounter==StepCount):
-                        StepCounter = 0
-                if (StepCounter<0):
-                        StepCounter = StepCount-1
-                # Wait before moving on
-                time.sleep(WaitTime)
+    """Steps"""
+    step_counter = 0
+    if nb < 0:
+        sign = -1
+    else:
+        sign = 1
+    nb = sign * nb * 2 # times 2 because half-step
+    print(f'nbsteps {nb} and sign {sign}')
+    for i in range(nb):
+        for my_pin in range(4):
+            xpin = StepPins[my_pin]
+            if Seq[step_counter][my_pin]!=0:
+                GPIO.output(xpin, True)
+            else:
+                GPIO.output(xpin, False)
+        step_counter += sign
+        # If we reach the end of the sequence => start again
+        if step_counter == STEP_COUNT:
+            step_counter = 0
+        if step_counter < 0:
+            step_counter = STEP_COUNT-1
+        # Wait before moving on
+        time.sleep(WAIT_TIME)
 
 if __name__ == '__main__' :
-    hasRun=False
-    while not hasRun:
-            # steps(nbStepsPerRev) # parcourt un tour dans le sens horaire
-            # time.sleep(1)
-            #steps(-nbStepsPerRev) # parcourt un tour dans le sens anti-horaire
-            steps(2048)
-            steps(-2048)
-            steps(512)
-            steps(-512)
-            time.sleep(1)
-            hasRun=True
+    HAS_RUN=False
+    while not HAS_RUN:
+        # steps(nbStepsPerRev) # parcourt un tour dans le sens horaire
+        # time.sleep(1)
+        #steps(-nbStepsPerRev) # parcourt un tour dans le sens anti-horaire
+        steps(2048)
+        steps(-2048)
+        steps(512)
+        steps(-512)
+        time.sleep(1)
+        HAS_RUN=True
     print("Stop motor")
     for pin in StepPins:
-            GPIO.output(pin, False)
+        GPIO.output(pin, False)
 
 # 0	0	.
 # 64	11.25	A

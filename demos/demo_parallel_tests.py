@@ -1,10 +1,10 @@
-"""Demo uses multiprocessing."""
+"""Demo implements multiprocessing."""
 
 import time
 import multiprocessing
 
 def useless_function(sec = 1):
-    """Useless function"""
+    """Some function"""
     print(f'Sleeping for {sec} second(s)')
     time.sleep(sec)
     print(f'Done sleeping for {sec} second(s)')

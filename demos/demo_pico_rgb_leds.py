@@ -1,3 +1,5 @@
+""""Python script implements RGBY Leds demo"""
+
 import utime
 from machine import Pin, PWM
 
@@ -16,6 +18,7 @@ pwm_yellow.freq(1000)
 
 
 def blink():
+    """Blink"""
     pwm_red.duty_u16(255 * 255)
     utime.sleep(1)
     pwm_red.duty_u16(0)
