@@ -3,21 +3,68 @@
 ## General Information
 PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal collection of libraries, demos and diagrams for Raspberry Pi.
 
-![cover](demos/raspetarberry_demo_keypad_input_on_lcd1602.jpg)
+![cover](demos/demo_zero_w_keypad_lcd1602.jpg)
 
 ## Contents
-- [Folder Structure](#folder-structure)
+- [/Demos](#demos)
+	- [Buzzer Active](#buzzer-active)
+	- [Dust Sensor](#dust-sensor)
+	- [Keypad + Key Switch](#keypad--key-switch)
+	- [RGB LEDs](#rgb-leds)
+	- [WiFi Pico](#wifi-pico)
+	- [Camera](#camera)
+	- [Keypad + LCD](#keypad--lcd)
+	- [Temperature Sensor DHT11](#temperature-sensor-dht11)
+	- [Stepping Motor](#stepping-motor)
+- [/Projects](#projects)
+	- [NASA API Wallpaper](#nasa-api-wallpaper)
+	- [Game Blinking RGBY LEDs](#game-blinking-rgby-leds-remembergby)
+	- [Parktronic Buzzer](#parktronic-buzzer)
+	- [Temperature on LCD Screen](#temperature-on-lcd-screen)
+	- [Dice 7-Segment](#dice-7-segment)
+	- [MP3 Greeting on Movement](#mp3-greeting-on-movement)
+	- [Windcock Stepping Motor](#windcock-stepping-motor)
 - [Technologies](#technologies)
 - [Known Issues](#known-issues)
 	- [Raspberry Pi Inaccurate Clock](#raspberry-pi-clock-inaccurate)
    	- [Raspberry Pi Boot Issues due to SD Card](#raspberry-pi-boot-issues-due-to-sd-card)
 - [Links](#links)
 
-## Folder Structure
+## Demos
 
-- /demos - Python scripts that implement the libraries of this repository
-- /diagrams - Images that represent personally drawn diagrams of the connections between Pi and gadgets onto a breadboard
-- /libraries - Python scripts that wrap outer libraries for easier use of different sensors and other gadgets through the Pi's GPIO
+### Buzzer Active
+
+### Dust Sensor
+
+### Keypad + Key Switch
+
+### RGB LEDs
+
+### WiFi Pico
+
+### Camera
+
+### Keypad + LCD
+
+### Temperature Sensor DHT11
+
+### Stepping Motor
+
+## Projects
+
+### NASA API Wallpaper
+
+### Game Blinking RGBY LEDs "RemembeRGBY"
+
+### Parktronic Buzzer
+
+### Temperature on LCD Screen
+
+### Dice 7-Segment
+
+### MP3 Greeting on Movement
+
+### Windcock Stepping Motor
 
 ## Technologies
 - import multiprocessing (with lock)
