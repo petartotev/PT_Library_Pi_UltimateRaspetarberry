@@ -109,3 +109,5 @@ Use Data cable, not Charging cable!
 - [Article on Keypad implementation](https://www.digikey.bg/en/maker/blogs/2021/how-to-connect-a-keypad-to-a-raspberry-pi)  
 - [Article on Stepping Motor](https://www.aranacorp.com/en/control-a-stepper-with-raspberrypi/)  
 - [Pico Not Connected to PC due to Cable](https://forums.raspberrypi.com/viewtopic.php?t=308412)
+- [NASA Wallpaper Fit](https://forum.lxde.org/viewtopic.php?t=31984)
+- [NASA Wallpaper Fit 2](https://stackoverflow.com/questions/45873124/pcmanfm-set-wallpaper-fails-on-raspbian-stretch-in-cron)

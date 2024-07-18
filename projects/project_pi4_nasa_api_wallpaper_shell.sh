@@ -5,4 +5,4 @@ python3.9 /home/user/Desktop/project_pi4_nasa_api_wallpaper_python.py
 export DISPLAY=:0
 export XAUTHORITY=/home/user/.Xauthority
 export XDG_RUNTIME_DIR=/run/user/1000
-pcmanfm --set-wallpaper /home/user/Desktop/`date +%Y-%m-%d`.jpg
+pcmanfm --set-wallpaper /home/user/Desktop/`date +%Y-%m-%d`.jpg --wallpaper-mode=fit
