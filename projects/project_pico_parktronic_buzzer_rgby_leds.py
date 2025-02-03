@@ -4,8 +4,8 @@ from machine import Pin
 import utime
 from picozero import LED
 
-buzzer = Pin(6, Pin.OUT)
-buzzer2 = Pin(14, Pin.OUT)
+buzzer = Pin(14, Pin.OUT)
+buzzer2 = Pin(15, Pin.OUT)
 
 redLed = LED(13)
 yellowLed = LED(12)
