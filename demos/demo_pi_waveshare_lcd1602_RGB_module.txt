@@ -1,0 +1,46 @@
+=================================================================
+Use Waveshare LCD 1602 RGB Screen (16,2) using Raspberry Pi
+=================================================================
+
+0. Prerequisites
+0.1 Read docs:
+	https://www.waveshare.com/lcd1602-rgb-module.htm
+	https://www.waveshare.com/wiki/LCD1602_RGB_Module
+
+0.2 Enable I2C via Terminal:
+	sudo raspi-config
+	Choose Interfacing Options > I2C > [Yes] to enable the I2C interface.
+	sudo reboot
+
+!!! If you don't enable I2C, a strange error occurs:
+	b = SMBus(1)
+	FileNotFoundError: [Errno 2] No such file or directory
+
+0.3	Download LCD1602-RGB-Module-demo.zip
+	cd ~
+	wget https://files.waveshare.com/upload/5/5b/LCD1602-RGB-Module-demo.zip
+	unzip LCD1602-RGB-Module-demo.zip
+	cd ~/LCD1602-RGB-Module-demo/Raspberry
+	sudo chmod 777 *
+	sudo python Choose_Color.py # THIS DIDN'T WORK!
+	sudo python Discoloration.py # THIS WORKED!
+	
+!!! Make sure you have Raspberry/RGB1602.py file available - it is the lib that controls the RGB LCD screen.
+
+1. Write some code using the LCD:
+
+	import RGB1602
+	import time
+	
+	lcd=RGB1602.RGB1602(16,2)
+
+	lcd.setRGB(64,128,64) # greenish
+	lcd.setCursor(0,0)
+	lcd.printout("Hello,")
+	time.sleep(1)
+	lcd.setCursor(0,1)
+	lcd.printout("World!")
+	time.sleep(3)
+	lcd.clear()
+	
+!!! Make sure you have RGB1602.py file in the dir of your python code!
