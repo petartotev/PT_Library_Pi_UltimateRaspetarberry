@@ -15,6 +15,7 @@ Use Waveshare LCD 1602 RGB Screen (16,2) using Raspberry Pi
 !!! If you don't enable I2C, a strange error occurs:
 	b = SMBus(1)
 	FileNotFoundError: [Errno 2] No such file or directory
+	Read more: https://forums.raspberrypi.com/viewtopic.php?t=332331
 
 0.3	Download LCD1602-RGB-Module-demo.zip
 	cd ~
@@ -26,6 +27,9 @@ Use Waveshare LCD 1602 RGB Screen (16,2) using Raspberry Pi
 	sudo python Discoloration.py # THIS WORKED!
 	
 !!! Make sure you have Raspberry/RGB1602.py file available - it is the lib that controls the RGB LCD screen.
+
+0.4 Make sure you have smbus installed (not sure if needed!):
+	sudo apt install python3-smbus
 
 1. Write some code using the LCD:
 

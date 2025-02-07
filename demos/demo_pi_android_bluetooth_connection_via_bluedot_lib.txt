@@ -1,0 +1,39 @@
+0.	Prerequisites
+
+0.1	Read the Blue Dot docs:
+			https://bluedot.readthedocs.io/en/latest/
+
+1.	On Pi, install BlueDot library:
+	sudo pip3 install bluedot
+	sudo pip3 install bluedot --upgrade
+
+2.	On Android, install 'Blue Dot' from Play Store:
+	https://play.google.com/store/apps/details?id=com.stuffaboutcode.bluedot
+
+3.	Pair the devices using the Desktop by following this doc:
+	https://bluedot.readthedocs.io/en/latest/pairpiandroid.html
+	
+3.1	On Android phone, open Settings > make discoverable
+3.2	On Pi, turn on Bluetooth
+3.3	On Pi, add device
+3.4	Choose Android phone and Pair
+3.5	Confirm pairing on both Android phone and Pi
+3.6 Click OK
+
+N.B. that one can pair devices using the Command Line described in the doc above!
+
+4. Write python code in mydot.py file:
+
+from bluedot import BlueDot
+bd = BlueDot()
+bd.wait_for_press()
+print("You pressed the blue dot!")
+
+5. Run code:
+	python3 mydot.py
+
+Output:
+	Server started XX:XX:XX:XX:XX:XX
+	Waiting for connection
+	
+6. Open Blue Dot and connect to Pi
