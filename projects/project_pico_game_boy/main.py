@@ -3,6 +3,7 @@ import RGB1602
 import utime
 from game_opereator import play_game_opereator
 from game_race import play_game_race
+from game_snake import play_game_snake
 
 # LCD
 lcd = RGB1602.RGB1602(16, 2)
@@ -94,6 +95,8 @@ def play_game_by_index():
         play_game_opereator()
     elif game_chosen == 1: # Race
         play_game_race()
+    elif game_chosen == 2: # Snake
+        play_game_snake()
     else:
         play_missing_game_animation()
 
