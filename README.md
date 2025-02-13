@@ -6,7 +6,13 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 ![cover](demos/demo_zero_w_keypad_lcd1602.jpg)
 
 ## Contents
-- [/Demos](#demos)
+- [Setup](#setup)
+	- [Setup Pico](#setup-pico)
+	- [Setup Pico W](#setup-pico-w)
+	- [Setup Zero W](#setup-zero-w)
+	- [Setup Zero 2W](#setup-zero-2w)
+	- [Setup Pi 4](#setup-pi-4)
+- [Demos](#demos)
 	- [Buzzer Active](#buzzer-active)
 	- [Dust Sensor](#dust-sensor)
 	- [Keypad + Key Switch](#keypad--key-switch)
@@ -16,7 +22,7 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [Keypad + LCD](#keypad--lcd)
 	- [Temperature Sensor DHT11](#temperature-sensor-dht11)
 	- [Stepping Motor](#stepping-motor)
-- [/Projects](#projects)
+- [Projects](#projects)
 	- [NASA API Wallpaper](#nasa-api-wallpaper)
 	- [Game Blinking RGBY LEDs](#game-blinking-rgby-leds-remembergby)
 	- [Parktronic Buzzer](#parktronic-buzzer)
@@ -29,6 +35,19 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [Raspberry Pi Inaccurate Clock](#raspberry-pi-clock-inaccurate)
    	- [Raspberry Pi Boot Issues due to SD Card](#raspberry-pi-boot-issues-due-to-sd-card)
 - [Links](#links)
+
+## Setup
+### Setup Pico
+### Setup Pico W
+1. Install the latest MicroPython firmware for Pico W:
+- Download the latest UF2 firmware for Pico W from https://micropython.org/download/RPI_PICO_W/
+- Plug in your Pico W while holding the BOOTSEL button.
+- It will appear as a drive on your computer.
+- Drag and drop the .uf2 file you downloaded onto it.
+- The board will reboot into MicroPython.
+### Setup Zero W
+### Setup Zero 2W
+### Setup Pi 4
 
 ## Demos
 
