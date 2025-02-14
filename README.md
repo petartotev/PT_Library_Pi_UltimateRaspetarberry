@@ -1,17 +1,29 @@
 # PT_Library_Pi_UltimateRaspetarberry
 
-## General Information
-PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal collection of libraries, demos and diagrams for Raspberry Pi.
+# General Information
+PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal collection of libraries, demos, projects and diagrams for Raspberry Pi.
 
 ![cover](demos/demo_zero_w_keypad_lcd1602.jpg)
 
-## Contents
+# Contents
 - [Setup](#setup)
 	- [Setup Pico](#setup-pico)
 	- [Setup Pico W](#setup-pico-w)
 	- [Setup Zero W](#setup-zero-w)
 	- [Setup Zero 2W](#setup-zero-2w)
 	- [Setup Pi 4](#setup-pi-4)
+- [Projects](#projects)
+	- [Project Pico W Weather Station](#project-pico-w-weather-station)
+	- [Project Pico Game Boy](#project-pico-game-boy)
+	- [Project Pico Parktronic](#project-pico-parktronic)
+- [Projects Old](#projects-old)
+	- [NASA API Wallpaper](#nasa-api-wallpaper)
+	- [Game Blinking RGBY LEDs](#game-blinking-rgby-leds-remembergby)
+	- [Parktronic Buzzer](#parktronic-buzzer)
+	- [Temperature on LCD Screen](#temperature-on-lcd-screen)
+	- [Dice 7-Segment](#dice-7-segment)
+	- [MP3 Greeting on Movement](#mp3-greeting-on-movement)
+	- [Windcock Stepping Motor](#windcock-stepping-motor)
 - [Demos](#demos)
 	- [Buzzer Active](#buzzer-active)
 	- [Dust Sensor](#dust-sensor)
@@ -22,76 +34,110 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [Keypad + LCD](#keypad--lcd)
 	- [Temperature Sensor DHT11](#temperature-sensor-dht11)
 	- [Stepping Motor](#stepping-motor)
-- [Projects](#projects)
-	- [NASA API Wallpaper](#nasa-api-wallpaper)
-	- [Game Blinking RGBY LEDs](#game-blinking-rgby-leds-remembergby)
-	- [Parktronic Buzzer](#parktronic-buzzer)
-	- [Temperature on LCD Screen](#temperature-on-lcd-screen)
-	- [Dice 7-Segment](#dice-7-segment)
-	- [MP3 Greeting on Movement](#mp3-greeting-on-movement)
-	- [Windcock Stepping Motor](#windcock-stepping-motor)
 - [Technologies](#technologies)
 - [Known Issues](#known-issues)
 	- [Raspberry Pi Inaccurate Clock](#raspberry-pi-clock-inaccurate)
    	- [Raspberry Pi Boot Issues due to SD Card](#raspberry-pi-boot-issues-due-to-sd-card)
 - [Links](#links)
 
-## Setup
-### Setup Pico
-### Setup Pico W
-1. Install the latest MicroPython firmware for Pico W:
-- Download the latest UF2 firmware for Pico W from https://micropython.org/download/RPI_PICO_W/
+# Setup
+## Setup Pico
+
+![pinout](./res/pinout_raspberry_pico.jpg)
+
+## Setup Pico W
+
+Install the latest MicroPython firmware for Pico W:
+- Download the latest UF2 firmware for Pico W from https://micropython.org/download/RPI_PICO_W/.
 - Plug in your Pico W while holding the BOOTSEL button.
 - It will appear as a drive on your computer.
 - Drag and drop the .uf2 file you downloaded onto it.
 - The board will reboot into MicroPython.
-### Setup Zero W
-### Setup Zero 2W
-### Setup Pi 4
 
-## Demos
+## Setup Zero W
 
-### Buzzer Active
+![pinout](./res/pinout_raspberry_zero.jpg)
 
-### Dust Sensor
+## Setup Zero 2W
 
-### Keypad + Key Switch
+## Setup Pi 4
 
-### RGB LEDs
+![pinout](./res/pinout_raspberry_pi_4.jpg)
 
-### WiFi Pico
+# Projects
 
-### Camera
+## Project Pico W Weather Station
 
-### Keypad + LCD
+`./projects/project_pico_w_weather_station/src/main.py`
 
-### Temperature Sensor DHT11
+### Encrypt Secrets.py with Base-64
 
-### Stepping Motor
+1. Encode Your Secrets (Run Python on Your Computer)
 
-## Projects
+```
+import base64
 
-### NASA API Wallpaper
+# Replace with your actual secrets
+ssid = "YOUR_WIFI_SSID"
+password = "YOUR_WIFI_PASSWORD"
+nasa_api_key = "YOUR_NASA_API_KEY"
 
-### Game Blinking RGBY LEDs "RemembeRGBY"
+encoded_ssid = base64.b64encode(ssid.encode()).decode()
+encoded_password = base64.b64encode(password.encode()).decode()
+encoded_api_key = base64.b64encode(nasa_api_key.encode()).decode()
 
-### Parktronic Buzzer
+print(f"SSID: {encoded_ssid}")
+print(f"PASSWORD: {encoded_password}")
+print(f"NASA_API_KEY: {encoded_api_key}")
+```
 
-### Temperature on LCD Screen
+2. Update Your secrets.py on the Pico
 
-### Dice 7-Segment
+```
+import base64
 
-### MP3 Greeting on Movement
+SSID = base64.b64decode('LUTVUl7XSUZJX2NTZUQ=').decode()
+PASSWORD = base64.b64decode('WU1VUl3XLOVEX1BBB1NXT1JE').decode()
+NASA_API_KEY = base64.b64decode('QUZDMTIzVASA').decode()
+```
 
-### Windcock Stepping Motor
+3. Keep main.py Unchanged
 
-## Technologies
+## Project Pico Game Boy
+
+`./projects/project_pico_game_boy/src/main.py`
+
+## Project Pico Parktronic
+
+`./projects/project_pico_parktronic/src/main.py`
+
+# Projects Old
+## NASA API Wallpaper
+## Game Blinking RGBY LEDs "RemembeRGBY"
+## Parktronic Buzzer
+## Temperature on LCD Screen
+## Dice 7-Segment
+## MP3 Greeting on Movement
+## Windcock Stepping Motor
+
+# Demos
+## Buzzer Active
+## Dust Sensor
+## Keypad + Key Switch
+## RGB LEDs
+## WiFi Pico
+## Camera
+## Keypad + LCD
+## Temperature Sensor DHT11
+## Stepping Motor
+
+# Technologies
 - import multiprocessing (with lock)
 	- demos/raspetarberryPiDemoLCD1602AndTempSensorDHT11_01.py
 
-## Known Issues
+# Known Issues
 
-### Raspberry Pi Clock Inaccurate
+## Raspberry Pi Clock Inaccurate
 
 https://stackoverflow.com/questions/71868313/how-to-sync-raspberry-pi-system-clock
 
@@ -102,7 +148,7 @@ sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -
 ```
 3. ✅ SUCCESS: RPi Clock gets set just fine!
 
-### Raspberry Pi Boot Issues due to SD Card
+## Raspberry Pi Boot Issues due to SD Card
 
 ⚠️ ERROR: When Raspberry Pi gets booted, the following series of errors occur in Terminal:
 
@@ -117,11 +163,11 @@ systemd-journalid[87]: Failed to send READY=1 notification message: Transport en
 
 ✅ SUCCESS: Take the SD card out of your Raspberry Pi, then plug it in again to get things right!
 
-### Raspberry Pico Not Read When Connected With HDMI Cable
+## Raspberry Pico Not Read When Connected With HDMI Cable
 
 Use Data cable, not Charging cable!
 
-## Links
+# Links
 - [Good article on Multiprocessing](https://analyticsindiamag.com/run-python-code-in-parallel-using-multiprocessing/#:~:text=Multiprocessing%20in%20Python%20enables%20the,run%20tasks%2Fprocesses%20in%20parallel.&text=Multiprocessing%20enables%20the%20computer%20to,involve%20a%20lot%20of%20computation.)  
 - [Stack Overflow article on Multiprocessing with Lock](https://stackoverflow.com/questions/28267972/python-multiprocessing-locks)  
 - [Article on 7-Segment-Display implementation](https://www.stuffaboutcode.com/2016/10/raspberry-pi-7-segment-display-gpiozero.html)  
