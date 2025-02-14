@@ -34,6 +34,9 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [Keypad + LCD](#keypad--lcd)
 	- [Temperature Sensor DHT11](#temperature-sensor-dht11)
 	- [Stepping Motor](#stepping-motor)
+- [Sensors](#sensors)
+	- [Dust Sensor Sharp GP2Y1010AU0F](#dust-sensor-sharp-gp2y1010au0f)
+	- [LCD1602 RGB Module](#lcd1602-rgb-module)
 - [Technologies](#technologies)
 - [Known Issues](#known-issues)
 	- [Raspberry Pi Inaccurate Clock](#raspberry-pi-clock-inaccurate)
@@ -130,6 +133,15 @@ NASA_API_KEY = base64.b64decode('QUZDMTIzVASA').decode()
 ## Keypad + LCD
 ## Temperature Sensor DHT11
 ## Stepping Motor
+
+# Sensors
+
+## Dust Sensor Sharp GP2Y1010AU0F
+- https://erelement.com/shop/sharp-gp2y1010au0f/
+- https://www.waveshare.com/dust-sensor.htm
+
+## LCD1602 RGB Module
+- https://www.waveshare.com/lcd1602-rgb-module.htm
 
 # Technologies
 - import multiprocessing (with lock)
