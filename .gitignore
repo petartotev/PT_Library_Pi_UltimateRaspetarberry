@@ -135,3 +135,5 @@ credentials.py
 # PT: Ignore bin folder
 /bin
 **/bin
+# PT: Ignore secrets.py
+secrets.py
