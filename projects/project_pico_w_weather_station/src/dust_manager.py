@@ -3,7 +3,6 @@ dust_manager - Dust Sensor Sharp GP2Y1010AU0F
 Module reads particulate matter (PM2.5) density and provides air quality evaluation based on EPA AQI standards.
 """
 
-
 from machine import Pin, ADC
 import utime
 

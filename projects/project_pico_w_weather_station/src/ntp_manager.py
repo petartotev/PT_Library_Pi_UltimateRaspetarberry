@@ -1,3 +1,7 @@
+"""
+ntp_manager - Set RTC time using NTP Servers
+"""
+
 import socket
 import struct
 import time

@@ -14,6 +14,8 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [Setup Pi 4](#setup-pi-4)
 - [Projects](#projects)
 	- [Project Pico W Weather Station](#project-pico-w-weather-station)
+		- [Encrypt Secrets with Base64](#encrypt-secrets-with-base-64)
+		- [Send Data to Google Sheets](#send-data-to-google-sheets)
 	- [Project Pico Game Boy](#project-pico-game-boy)
 	- [Project Pico Parktronic](#project-pico-parktronic)
 - [Projects Old](#projects-old)
@@ -73,7 +75,7 @@ Install the latest MicroPython firmware for Pico W:
 
 `./projects/project_pico_w_weather_station/src/main.py`
 
-### Encrypt Secrets.py with Base-64
+### Encrypt Secrets with Base-64
 
 1. Encode Your Secrets (Run Python on Your Computer)
 
@@ -105,6 +107,51 @@ NASA_API_KEY = base64.b64decode('QUZDMTIzVASA').decode()
 ```
 
 3. Keep main.py Unchanged
+
+### Send Data to Google Sheets
+
+1. Open a Google Sheet.
+2. Go to `Extensions` → `Apps Script`.
+3. Replace the content with this basic script:
+
+```
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  sheet.appendRow([data.date, data.temperature, data.humidity, data.pm25, data.density]);
+  return ContentService.createTextOutput("Data added");
+}
+```
+
+4. Deploy the script:
+- Click `Deploy` → `New Deployment`.
+- Select `Web app` > `[Deploy]`
+	- Description: your-description-here
+	- Web app
+		- Execute as: Me (email@gmail.com)
+		- Who has access: Anyone
+- Click `Authorize access` and sign in with your Google Account.
+- Copy the ``Deployment ID and Deployment URL – this is what your Pico W will send data to. Should be like:
+
+```
+https://script.google.com/macros/s/AK47cbzQUlpGJ-wphiqX2Y6Z89lQu4XxWWzZ3A1i3LEv3L99997c43NpBhg2SqIAMgrUT-OiOi/exec
+```
+
+5. Example Pico W MicroPython Code:
+
+```
+import urequests
+import ujson
+import secrets
+
+headers = {'Content-Type': 'application/json'}
+
+def send_data(data):
+    print(data)
+    response = urequests.post(secrets.GOOGLE_URL, data=ujson.dumps(data), headers=headers)
+    print(response.text)
+    response.close()
+```
 
 ## Project Pico Game Boy
 
