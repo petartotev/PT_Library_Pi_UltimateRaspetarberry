@@ -76,17 +76,17 @@ def get_air_quality_index_evaluation(density):
     
     density = float(density)
     
-    if 0 <= density <= 12.0:
+    if 0 <= density <= 9.0:
         return "Good"
-    if 12.1 <= density <= 35.4:
+    if 9.0 < density <= 35.4:
         return "Moderate"
-    if 35.5 <= density <= 55.4:
+    if 35.4 < density <= 55.4:
         return "Unhealthy for SG" # Unhealthy for Sensitive Groups
-    if 55.5 <= density <= 150.4:
+    if 55.4 < density <= 125.4:
         return "Unhealthy!"
-    if 150.5 <= density <= 250.4:
+    if 125.4 < density <= 225.4:
         return "Very Unhealthy!!"
-    if 250.5 <= density <= 500:
+    if 225.4 < density <= 500:
         return "Hazardous!!!"
 
     return "?"
