@@ -14,6 +14,7 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [Setup Pi 4](#setup-pi-4)
 - [Projects](#projects)
 	- [Project Pico W Weather Station](#project-pico-w-weather-station)
+		- [Flow](#flow)
 		- [Encrypt Secrets with Base64](#encrypt-secrets-with-base-64)
 		- [Send Data to Google Sheets](#send-data-to-google-sheets)
 	- [Project Pico Game Boy](#project-pico-game-boy)
@@ -28,7 +29,7 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [Windcock Stepping Motor](#windcock-stepping-motor)
 - [Demos](#demos)
 	- [Buzzer Active](#buzzer-active)
-	- [Dust Sensor](#dust-sensor)
+	- [Dust Sensor Demo](#dust-sensor-demo)
 	- [Keypad + Key Switch](#keypad--key-switch)
 	- [RGB LEDs](#rgb-leds)
 	- [WiFi Pico](#wifi-pico)
@@ -39,10 +40,12 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 - [Sensors](#sensors)
 	- [Dust Sensor Sharp GP2Y1010AU0F](#dust-sensor-sharp-gp2y1010au0f)
 	- [LCD1602 RGB Module](#lcd1602-rgb-module)
+	- [DHT22 Temperature and Humidity Sensor](#dht22-temperature-and-humidity-sensor)
 - [Technologies](#technologies)
 - [Known Issues](#known-issues)
 	- [Raspberry Pi Inaccurate Clock](#raspberry-pi-clock-inaccurate)
    	- [Raspberry Pi Boot Issues due to SD Card](#raspberry-pi-boot-issues-due-to-sd-card)
+	- [Raspberry Pico not recognized when connected with Micro USB cable](#raspberry-pico-not-recognized-when-connected-with-micro-usb-cable)
 - [Links](#links)
 
 # Setup
@@ -74,6 +77,40 @@ Install the latest MicroPython firmware for Pico W:
 ## Project Pico W Weather Station
 
 `./projects/project_pico_w_weather_station/src/main.py`
+
+### Flow
+#### Weather Station
+1. Pico W connects to Wi-Fi (`./src/wifi_manager.py`) by reading encoded secrets from a `./src/secrets.py` file.  
+See section [Encrypt Secrets with Base 64](#encrypt-secrets-with-base-64).
+2. Next, it sets its RTC time from NTP servers (`./src/ntp_manager.py`).
+3. Next, it executes an infinite loop in which:
+- it displays the current date and time on a LCD1602 screen (`./src/RGB1602.py`);
+- it gathers and displays current dust data from a Dust Sensor (`./src/dust_manager.py`);  
+See section [Dust Sensor Sharp](#dust-sensor-sharp-gp2y1010au0f).
+- it gathers and displays current temperature / humidity data from a DHT22 Sensor (`./src/temp_manager.py`).  
+See section [DHT22 Sensor](#dht22-temperature-and-humidity-sensor).
+4. If the time is XX:00 or XX:30, it sends a data object to Google Sheets containing the data collected from the current cycle of the infinite loop (`./src/google_manager.py`).  
+See section [Send data to Google Sheets](#send-data-to-google-sheets).
+```
+    data = {
+        "date": date_now,
+        "temperature": temp_now,
+        "humidity": hum_now,
+        "pm25": pm_now,
+        "density": density_now
+    }
+``` 
+5. At 23:59, it tries to reset its RTC time from NTP server(s).
+
+⚠️ ERROR: In case of any warnings or errors, it prints them on the console, visualizes them on the LCD screen and logs them in `./src/errors.log`.
+
+#### Reporting
+
+6. Next, one can download the Google Sheet as `./report/input/air_quality_data.csv`.
+7. Using the CSV file as input, one can run `./report/src/main.py`.  
+
+✅ SUCCESS: This generates 4 diagrams in `./report/output` by using libraries **pandas** and **matplotlib**.
+
 
 ### Encrypt Secrets with Base-64
 
@@ -172,7 +209,7 @@ def send_data(data):
 
 # Demos
 ## Buzzer Active
-## Dust Sensor
+## Dust Sensor Demo
 ## Keypad + Key Switch
 ## RGB LEDs
 ## WiFi Pico
@@ -184,11 +221,16 @@ def send_data(data):
 # Sensors
 
 ## Dust Sensor Sharp GP2Y1010AU0F
-- https://erelement.com/shop/sharp-gp2y1010au0f/
 - https://www.waveshare.com/dust-sensor.htm
+- https://erelement.com/shop/sharp-gp2y1010au0f/
+
+![air_quality](./res/air_quality.jpg)
 
 ## LCD1602 RGB Module
 - https://www.waveshare.com/lcd1602-rgb-module.htm
+- https://erelement.com/shop/lcd-16x2-rgb-ws/
+
+## DHT22 Temperature and Humidity Sensor
 
 # Technologies
 - import multiprocessing (with lock)
@@ -222,9 +264,9 @@ systemd-journalid[87]: Failed to send READY=1 notification message: Transport en
 
 ✅ SUCCESS: Take the SD card out of your Raspberry Pi, then plug it in again to get things right!
 
-## Raspberry Pico Not Read When Connected With HDMI Cable
+## Raspberry Pico not recognized when connected with Micro USB cable
 
-Use Data cable, not Charging cable!
+✅ SUCCESS: Use `Data` cable, not `Charging` cable!
 
 # Links
 - [Good article on Multiprocessing](https://analyticsindiamag.com/run-python-code-in-parallel-using-multiprocessing/#:~:text=Multiprocessing%20in%20Python%20enables%20the,run%20tasks%2Fprocesses%20in%20parallel.&text=Multiprocessing%20enables%20the%20computer%20to,involve%20a%20lot%20of%20computation.)  
