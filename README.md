@@ -79,18 +79,15 @@ Install the latest MicroPython firmware for Pico W:
 `./projects/project_pico_w_weather_station/src/main.py`
 
 ### Flow
+
 #### Weather Station
-1. Pico W connects to Wi-Fi (`./src/wifi_manager.py`) by reading encoded secrets from a `./src/secrets.py` file.  
-See section [Encrypt Secrets with Base 64](#encrypt-secrets-with-base-64).
+1. Pico W connects to Wi-Fi (`./src/wifi_manager.py`) by reading [Encrypted Base 64 Secrets](#encrypt-secrets-with-base-64) from a `./src/secrets.py` file.
 2. Next, it sets its RTC time from NTP servers (`./src/ntp_manager.py`).
 3. Next, it executes an infinite loop in which:
-- it displays the current date and time on a LCD1602 screen (`./src/RGB1602.py`);
-- it gathers and displays current dust data from a Dust Sensor (`./src/dust_manager.py`);  
-See section [Dust Sensor Sharp](#dust-sensor-sharp-gp2y1010au0f).
-- it gathers and displays current temperature / humidity data from a DHT22 Sensor (`./src/temp_manager.py`).  
-See section [DHT22 Sensor](#dht22-temperature-and-humidity-sensor).
-4. If the time is XX:00 or XX:30, it sends a data object to Google Sheets containing the data collected from the current cycle of the infinite loop (`./src/google_manager.py`).  
-See section [Send data to Google Sheets](#send-data-to-google-sheets).
+- it displays the current date and time on a [LCD1602 Screen](#lcd1602-rgb-module) (`./src/RGB1602.py`);
+- it gathers and displays current dust data from a [Dust Sensor](#dust-sensor-sharp-gp2y1010au0f) (`./src/dust_manager.py`);
+- it gathers and displays current temperature / humidity data from a [DHT22 Sensor](#dht22-temperature-and-humidity-sensor) (`./src/temp_manager.py`).
+4. If the time is XX:00 or XX:30, it [sends a data object to Google Sheets](#send-data-to-google-sheets) containing the data collected from the current cycle of the infinite loop (`./src/google_manager.py`).
 ```
     data = {
         "date": date_now,
@@ -106,11 +103,10 @@ See section [Send data to Google Sheets](#send-data-to-google-sheets).
 
 #### Reporting
 
-6. Next, one can download the Google Sheet as `./report/input/air_quality_data.csv`.
-7. Using the CSV file as input, one can run `./report/src/main.py`.  
+1. One can download the Google Sheet as `./report/input/air_quality_data.csv`.
+2. Using the CSV file as input, one can run `./report/src/main.py`.  
 
 ✅ SUCCESS: This generates 4 diagrams in `./report/output` by using libraries **pandas** and **matplotlib**.
-
 
 ### Encrypt Secrets with Base-64
 

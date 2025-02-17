@@ -209,8 +209,59 @@ def analyze_air_quality(date_from=None, date_to=None):
     print(f"{date_from}_{date_to}_humidity_diagram.png")
     print(f"{date_from}_{date_to}_temperature_diagram.png")
 
+    # Step 18: Calculate summary statistics
+    temperature_stats = df['Temperature [°C]'].agg(['average', 'min', 'max', 'median'])
+    humidity_stats = df['Humidity [%]'].agg(['average', 'min', 'max', 'median'])
+    pm25_stats = df['PM2.5 [µg/m³]'].agg(['average', 'min', 'max', 'median'])
 
-# Step 18: Example usage of the function to analyze air quality
+    # Print the summary in the console
+    print(f"\nSummary Statistics ({date_from} to {date_to}):")
+    print(f"Temperature [°C]:\n{temperature_stats}")
+    print(f"Humidity [%]:\n{humidity_stats}")
+    print(f"PM2.5 [µg/m³]:\n{pm25_stats}")
+
+    # Save the summary to a text file
+    summary_filename = f'{date_from}_{date_to}_summary_statistics.txt'
+    with open(summary_filename, 'w') as f:
+        f.write(f"Summary Statistics ({date_from} to {date_to}):\n\n")
+        f.write(f"Temperature [°C]:\n{temperature_stats.to_string()}\n\n")
+        f.write(f"Humidity [%]:\n{humidity_stats.to_string()}\n\n")
+        f.write(f"PM2.5 [µg/m³]:\n{pm25_stats.to_string()}\n")
+
+    print(f"Summary statistics saved as: {summary_filename}")
+
+    # Optional: Display summary as a table using matplotlib
+    fig, ax = plt.subplots(figsize=(7, 4))  # Slightly wider figure
+    ax.axis('tight')
+    ax.axis('off')
+
+    table_data = [
+        ["Metric", "Average", "Min", "Max", "Median"],
+        ["Temperature [°C]", f"{temperature_stats['average']:.2f}", f"{temperature_stats['min']:.2f}", f"{temperature_stats['max']:.2f}", f"{temperature_stats['median']:.2f}"],
+        ["Humidity [%]", f"{humidity_stats['average']:.2f}", f"{humidity_stats['min']:.2f}", f"{humidity_stats['max']:.2f}", f"{humidity_stats['median']:.2f}"],
+        ["PM2.5 [µg/m³]", f"{pm25_stats['average']:.2f}", f"{pm25_stats['min']:.2f}", f"{pm25_stats['max']:.2f}", f"{pm25_stats['median']:.2f}"],
+    ]
+
+    table = ax.table(cellText=table_data, loc='center', cellLoc='center', colLabels=None, bbox=[0, -0.2, 1, 1.2])  # Stretch the height a bit
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+
+    # Adjust column widths to prevent tight first column
+    for i in range(5):
+        table.auto_set_column_width(i)
+
+    # Add a title above the table
+    plt.title(f'Summary Statistics ({date_from} to {date_to})', fontsize=12, pad=10)
+
+    # Save the table as an image
+    summary_table_filename = f'{date_from}_{date_to}_summary_table.png'
+    plt.savefig(summary_table_filename, bbox_inches='tight', pad_inches=0.5)
+    plt.clf()
+
+    print(f"Summary table saved as: {summary_table_filename}")
+
+
+# Step 19: Example usage of the function to analyze air quality
 # Call the function without specifying dates to use the dataset's full date range
 analyze_air_quality()
 
