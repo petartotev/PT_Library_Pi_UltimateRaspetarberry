@@ -106,7 +106,7 @@ Install the latest MicroPython firmware for Pico W:
 1. One can download the Google Sheet as `./report/input/air_quality_data.csv`.
 2. Using the CSV file as input, one can run `./report/src/main.py`.  
 
-✅ SUCCESS: This generates 4 diagrams in `./report/output` by using libraries **pandas** and **matplotlib**.
+✅ SUCCESS: This generates 4 diagrams in `./report/output` by using libraries [**pandas**](https://pandas.pydata.org/docs/) and [**matplotlib**](https://matplotlib.org/stable/).
 
 ### Encrypt Secrets with Base-64
 
