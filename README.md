@@ -13,12 +13,13 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [Setup Zero 2W](#setup-zero-2w)
 	- [Setup Pi 4](#setup-pi-4)
 - [Projects](#projects)
+	- [Project Pico Game Boy](#project-pico-game-boy)
 	- [Project Pico W Weather Station](#project-pico-w-weather-station)
 		- [Flow](#flow)
 		- [Encrypt Secrets with Base64](#encrypt-secrets-with-base-64)
 		- [Send Data to Google Sheets](#send-data-to-google-sheets)
-	- [Project Pico Game Boy](#project-pico-game-boy)
-	- [Project Pico Parktronic](#project-pico-parktronic)
+	- [Project Pi Zero W Parktronic Security](#project-pi-zero-w-parktronic-security)
+		- [Use Google Drive API to send Images](#use-google-drive-api-to-send-images)
 - [Projects Old](#projects-old)
 	- [NASA API Wallpaper](#nasa-api-wallpaper)
 	- [Game Blinking RGBY LEDs](#game-blinking-rgby-leds-remembergby)
@@ -74,8 +75,10 @@ Install the latest MicroPython firmware for Pico W:
 
 # Projects
 
-## Project Pico W Weather Station
+## Project Pico Game Boy
+`./projects/project_pico_game_boy/src/main.py`
 
+## Project Pico W Weather Station
 `./projects/project_pico_w_weather_station/src/main.py`
 
 ### Flow
@@ -186,13 +189,10 @@ def send_data(data):
     response.close()
 ```
 
-## Project Pico Game Boy
+## Project Pi Zero W Parktronic Security
+`./projects/project_pi_zero_w_parktronic/src/main.py`
 
-`./projects/project_pico_game_boy/src/main.py`
-
-## Project Pico Parktronic
-
-`./projects/project_pico_parktronic/src/main.py`
+### Use Google Drive API to send Images
 
 # Projects Old
 ## NASA API Wallpaper
@@ -227,6 +227,7 @@ def send_data(data):
 - https://erelement.com/shop/lcd-16x2-rgb-ws/
 
 ## DHT22 Temperature and Humidity Sensor
+- https://electrocredible.com/raspberry-pi-pico-dht22-micropython-tutorial/
 
 # Technologies
 - import multiprocessing (with lock)
