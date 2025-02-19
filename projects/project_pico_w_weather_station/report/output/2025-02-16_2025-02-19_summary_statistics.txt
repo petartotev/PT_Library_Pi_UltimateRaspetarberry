@@ -1,0 +1,19 @@
+Summary Statistics (2025-02-16 to 2025-02-19):
+
+Temperature [°C]:
+average    20.938889
+min        20.200000
+max        22.800000
+median     20.800000
+
+Humidity [%]:
+average    50.617361
+min        43.700000
+max        60.700000
+median     49.000000
+
+PM2.5 [µg/m³]:
+average    22.379306
+min        10.780000
+max        32.640000
+median     22.290000
