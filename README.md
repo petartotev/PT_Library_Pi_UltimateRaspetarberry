@@ -19,6 +19,8 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 		- [Encrypt Secrets with Base64](#encrypt-secrets-with-base-64)
 		- [Send Data to Google Sheets](#send-data-to-google-sheets)
 	- [Project Pi Zero W Parktronic Security](#project-pi-zero-w-parktronic-security)
+		- [Set Raspberry Pi Camera Module v2.1 NoIR](#set-raspberry-pi-camera-module-v21-noir)
+			- [Known Issues](#known-issues)
 		- [Use Google Drive API to send Images](#use-google-drive-api-to-send-images)
 - [Projects Old](#projects-old)
 	- [NASA API Wallpaper](#nasa-api-wallpaper)
@@ -43,7 +45,7 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [LCD1602 RGB Module](#lcd1602-rgb-module)
 	- [DHT22 Temperature and Humidity Sensor](#dht22-temperature-and-humidity-sensor)
 - [Technologies](#technologies)
-- [Known Issues](#known-issues)
+- [Known Issues](#known-issues-1)
 	- [Raspberry Pi Inaccurate Clock](#raspberry-pi-clock-inaccurate)
    	- [Raspberry Pi Boot Issues due to SD Card](#raspberry-pi-boot-issues-due-to-sd-card)
 	- [Raspberry Pico not recognized when connected with Micro USB cable](#raspberry-pico-not-recognized-when-connected-with-micro-usb-cable)
@@ -66,6 +68,13 @@ Install the latest MicroPython firmware for Pico W:
 ## Setup Zero W
 
 ![pinout](./res/pinout_raspberry_zero.jpg)
+
+1. Download `Raspberry Pi Imager` from https://www.raspberrypi.com/software/
+2. Install `Raspberry Pi OS`
+3. In Terminal, open Raspi Config > Interfaces, then enable SSH and any other needed ones:
+```
+sudo raspi-config
+```
 
 ## Setup Zero 2W
 
@@ -192,7 +201,36 @@ def send_data(data):
 ## Project Pi Zero W Parktronic Security
 `./projects/project_pi_zero_w_parktronic/src/main.py`
 
+### Set Raspberry Pi Camera Module v2.1 NoIR
+
+https://www.raspberrypi.com/documentation/accessories/camera.html
+https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
+
+#### Known Issues
+
+⚠️ ERROR 1: Images produced by picamera2 library seem ultra zoomed and blurred in contrast to result from `libcamera-hello` execution
+https://forums.raspberrypi.com/viewtopic.php?t=380439
+
+✅ SUCCESS: Execute update and upgrade, then reboot, then reinstall picamera2 and lib-camera modules:
+
+```
+sudo apt-get update -y
+sudo apt-get upgrade -y
+```
+
+⚠️ ERROR 2: After update and upgrade, if `libcamera` or `picamera2` command is executed, the following error occurs:
+```
+symbol lookup error: /lib/arm-linux.../libcamera.so.0.3: undefined symbol: _ZN7...compute_optimal_strideER24pisp_image_format_config
+``` 
+
+✅ SUCCESS: Reinstall `libcamera` and `picamera2`:
+```
+sudo apt-get install --reinstall libcamera-apps libcamera-dev python3-picamera2
+```
+
 ### Use Google Drive API to send Images
+
+https://github.com/googlearchive/PyDrive/issues/21
 
 # Projects Old
 ## NASA API Wallpaper
