@@ -1,6 +1,7 @@
 import pandas as pd  # Import the pandas library for data manipulation and analysis
 import matplotlib.pyplot as plt  # Import the matplotlib library for plotting graphs
 
+point_values_visualized = False;
 
 # Define a function to analyze air quality
 def analyze_air_quality(date_from=None, date_to=None):
@@ -74,8 +75,9 @@ def analyze_air_quality(date_from=None, date_to=None):
     plt.scatter(min_temp_idx, min_temp, color='black', s=16, zorder=3)
 
     # Step 8: Annotate each point in the temperature plot with its value (above the point)
-    for i, v in enumerate(df['Temperature [°C]']):
-        plt.text(df.index[i], v + 0.3, f'{v:.2f}', ha='center', fontsize=8, rotation=90, verticalalignment='bottom')
+    if point_values_visualized:
+        for i, v in enumerate(df['Temperature [°C]']):
+            plt.text(df.index[i], v + 0.3, f'{v:.2f}', ha='center', fontsize=8, rotation=90, verticalalignment='bottom')
 
     # Step 9: Set plot title, labels, and formatting
     plt.title(f'Temperature Over Time')  # Title of the plot
@@ -113,8 +115,9 @@ def analyze_air_quality(date_from=None, date_to=None):
     plt.scatter(min_humidity_idx, min_humidity, color='black', s=16, zorder=3)
 
     # Step 11: Annotate each point in the humidity plot with its value (above the point)
-    for i, v in enumerate(df['Humidity [%]']):
-        plt.text(df.index[i], v + 0.3, f'{v:.2f}', ha='center', fontsize=8, rotation=90, verticalalignment='bottom')
+    if point_values_visualized:
+        for i, v in enumerate(df['Humidity [%]']):
+            plt.text(df.index[i], v + 0.3, f'{v:.2f}', ha='center', fontsize=8, rotation=90, verticalalignment='bottom')
 
     # Step 12: Set plot title, labels, and formatting for humidity
     plt.title(f'Humidity Over Time')
@@ -151,8 +154,9 @@ def analyze_air_quality(date_from=None, date_to=None):
         plt.axhspan(low, high, facecolor=color, alpha=0.1, zorder=0)
 
     # Step 14: Annotate each point in the PM2.5 plot with its value (above the point)
-    for i, v in enumerate(df['PM2.5 [µg/m³]']):
-        plt.text(df.index[i], v + 0.3, f'{v:.2f}', ha='center', fontsize=8, rotation=90, verticalalignment='bottom')
+    if point_values_visualized:
+        for i, v in enumerate(df['PM2.5 [µg/m³]']):
+            plt.text(df.index[i], v + 0.3, f'{v:.2f}', ha='center', fontsize=8, rotation=90, verticalalignment='bottom')
 
     # Step 15: Set plot title, labels, and formatting for PM2.5
     plt.title(f'PM2.5 Over Time')
@@ -263,5 +267,5 @@ def analyze_air_quality(date_from=None, date_to=None):
 
 # Step 19: Example usage of the function to analyze air quality
 # Call the function without specifying dates to use the dataset's full date range
+#analyze_air_quality(date_from='2025-02-16', date_to='2025-02-22')
 analyze_air_quality()
-

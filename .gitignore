@@ -137,3 +137,5 @@ credentials.py
 **/bin
 # PT: Ignore secrets.py
 secrets.py
+client_secrets.json
+token.json
