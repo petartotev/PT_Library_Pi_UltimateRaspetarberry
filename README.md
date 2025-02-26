@@ -1,7 +1,6 @@
 # PT_Library_Pi_UltimateRaspetarberry
 
-# General Information
-PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal collection of libraries, demos, projects and diagrams for Raspberry Pi.
+PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal collection of libraries, demos, projects and diagrams for Raspberry Pi using Python.
 
 ![cover](demos/demo_zero_w_keypad_lcd1602.jpg)
 
@@ -10,18 +9,24 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [Setup Pico](#setup-pico)
 	- [Setup Pico W](#setup-pico-w)
 	- [Setup Zero W](#setup-zero-w)
+		- [Initial Setup](#initial-setup-zero-w)
+		- [💡 Send Files using SCP Client](#send-files-using-scp-client)
 	- [Setup Zero 2W](#setup-zero-2w)
 	- [Setup Pi 4](#setup-pi-4)
 - [Projects](#projects)
 	- [Project Pico Game Boy](#project-pico-game-boy)
 	- [Project Pico W Weather Station](#project-pico-w-weather-station)
 		- [Flow](#flow)
-		- [Encrypt Secrets with Base64](#encrypt-secrets-with-base-64)
-		- [Send Data to Google Sheets](#send-data-to-google-sheets)
+			- [Weather Station](#weather-station)
+			- [Reporting](#reporting)
+		- [💡 Encrypt Secrets with Base64](#encrypt-secrets-with-base-64)
+		- [💡 Send Data to Google Sheets](#send-data-to-google-sheets)
 	- [Project Pi Zero W Parktronic Security](#project-pi-zero-w-parktronic-security)
-		- [Set Raspberry Pi Camera Module v2.1 NoIR](#set-raspberry-pi-camera-module-v21-noir)
-			- [Known Issues](#known-issues)
-		- [Use Google Drive API to send Images](#use-google-drive-api-to-send-images)
+		- [Prerequisites](#prerequisites)
+		- [💡 Set Raspberry Pi Camera Module v2.1 NoIR](#set-raspberry-pi-camera-module-v21-noir)
+			- [Known Issues](#known-issues-camera)
+		- [💡 Use Google Drive API to send Images](#use-google-drive-api-to-send-images)
+			- [Known Issues](#known-issues-pydrive2)
 - [Projects Old](#projects-old)
 	- [NASA API Wallpaper](#nasa-api-wallpaper)
 	- [Game Blinking RGBY LEDs](#game-blinking-rgby-leds-remembergby)
@@ -45,13 +50,14 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [LCD1602 RGB Module](#lcd1602-rgb-module)
 	- [DHT22 Temperature and Humidity Sensor](#dht22-temperature-and-humidity-sensor)
 - [Technologies](#technologies)
-- [Known Issues](#known-issues-1)
+- [Known Issues](#known-issues-common)
 	- [Raspberry Pi Inaccurate Clock](#raspberry-pi-clock-inaccurate)
    	- [Raspberry Pi Boot Issues due to SD Card](#raspberry-pi-boot-issues-due-to-sd-card)
 	- [Raspberry Pico not recognized when connected with Micro USB cable](#raspberry-pico-not-recognized-when-connected-with-micro-usb-cable)
 - [Links](#links)
 
 # Setup
+
 ## Setup Pico
 
 ![pinout](./res/pinout_raspberry_pico.jpg)
@@ -69,12 +75,45 @@ Install the latest MicroPython firmware for Pico W:
 
 ![pinout](./res/pinout_raspberry_zero.jpg)
 
-1. Download `Raspberry Pi Imager` from https://www.raspberrypi.com/software/
-2. Install `Raspberry Pi OS`
-3. In Terminal, open Raspi Config > Interfaces, then enable SSH and any other needed ones:
+### Initial Setup (Zero W)
+
+1. Download the latest `Raspberry Pi Imager` from https://www.raspberrypi.com/software/.
+2. Install `Raspberry Pi OS`.
+3. In Terminal, open `Raspi Config` > `Interface Options`, then enable `SSH` and any other needed interfaces (e.g. `VNC`, `I2C`):
 ```
 sudo raspi-config
 ```
+4. Make sure you did enable SSH:
+```
+sudo systemctl status ssh
+
+Output Expected:
+Active: active (running) since Wed 2025-02-26 10:33:06 EET; 56min ago
+```
+5. Update and upgrade:
+```
+sudo apt update -y
+sudo apt upgrade -y
+```
+⚠️ WARNING: Upgrade takes quite some time (~ 40-50 minutes).
+6. Check if you have all needed Python-related packages installed and if not - install them:
+```
+python3 --version
+pip --version
+pip3 --version
+
+sudo apt install python3 python3-pip -y
+```
+
+### Send Files using SCP Client
+
+1. Make sure you have SSH enabled on Pi (see [previous section](#initial-setup-zero-w)).
+2. On Windows:
+- download and install a SCP client, like [WinSCP](https://winscp.net);
+- open WinSCP and enter Raspberry Pi's IP address (e.g. 192.168.0.123), username and password;
+- navigate to the directory containing the files and transfer them to your desired location on Windows.
+
+![winscp](./res/winscp-window.jpg)
 
 ## Setup Zero 2W
 
@@ -111,7 +150,7 @@ sudo raspi-config
 ``` 
 5. At 23:59, it tries to reset its RTC time from NTP server(s).
 
-⚠️ ERROR: In case of any warnings or errors, it prints them on the console, visualizes them on the LCD screen and logs them in `./src/errors.log`.
+🔴 ERROR: In case of any warnings or errors, it prints them on the console, visualizes them on the LCD screen and logs them in `./src/errors.log`.
 
 #### Reporting
 
@@ -201,14 +240,31 @@ def send_data(data):
 ## Project Pi Zero W Parktronic Security
 `./projects/project_pi_zero_w_parktronic/src/main.py`
 
+### Prerequisites
+
+Setup Pi Zero W by following [this guide](#setup-zero-w).
+
 ### Set Raspberry Pi Camera Module v2.1 NoIR
 
 https://www.raspberrypi.com/documentation/accessories/camera.html
 https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
 
-#### Known Issues
+1. Make sure you have `libcamera` package installed:
+```
+libcamera-hello
+libcamera-still -o test.jpg
+```
 
-⚠️ ERROR 1: Images produced by picamera2 library seem ultra zoomed and blurred in contrast to result from `libcamera-hello` execution
+2. Install picamera2:
+
+```
+sudo apt update
+sudo apt install -y python3-picamera2
+```
+
+#### Known Issues (Camera)
+
+🔴 ERROR 1: Images produced by picamera2 library seem ultra zoomed and blurred in contrast to result from `libcamera-hello` execution
 https://forums.raspberrypi.com/viewtopic.php?t=380439
 
 ✅ SUCCESS: Execute update and upgrade, then reboot, then reinstall picamera2 and lib-camera modules:
@@ -218,7 +274,7 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 ```
 
-⚠️ ERROR 2: After update and upgrade, if `libcamera` or `picamera2` command is executed, the following error occurs:
+🔴 ERROR 2: After update and upgrade, if `libcamera` or `picamera2` command is executed, the following error occurs:
 ```
 symbol lookup error: /lib/arm-linux.../libcamera.so.0.3: undefined symbol: _ZN7...compute_optimal_strideER24pisp_image_format_config
 ``` 
@@ -231,6 +287,92 @@ sudo apt-get install --reinstall libcamera-apps libcamera-dev python3-picamera2
 ### Use Google Drive API to send Images
 
 https://github.com/googlearchive/PyDrive/issues/21
+
+1. Install `pydrive2` from Terminal:
+
+```
+pip3 install PyDrive2
+```
+
+#### Known Issues (pydrive2)
+
+🔴 ERROR: `error: externally-managed-environment`
+
+✅ SUCCESS: Use a Virtual Environment (Recommended):
+```
+sudo apt install python3-venv
+python3 -m venv myenv
+source myenv/bin/activate
+```
+
+To exit the virtual environment, run:
+```
+deactivate
+```
+
+🔴 ERROR: `error: subprocess-exited-with-error`
+```
+Cargo, the Rust package manager, is not installed or is not on PATH.
+This package requires Rust and Cargo to compile extensions.
+```
+🔴 ERROR: `error: metadata-generation-failed`
+```
+Encountered error while generating package metadata.
+```
+
+✅ SUCCESS: Install `Rust` and `Cargo` as follows:
+
+1. Download and run the rustup installation script:
+```curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Follow the on-screen instructions to complete the installation
+```
+2. Make sure that Cargo's bin directory is added to your system's PATH:
+```
+# Add Cargo to the system PATH for the current session
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# To make this change permanent, add the above line to your shell's profile script
+# For example, add it to ~/.bashrc or ~/.profile
+```
+
+3. Verify installation:
+```
+rustc --version
+cargo --version
+```
+
+4. Upgrade `pip`:
+```
+pip install --upgrade pip
+```
+
+5. Retry installing `pydrive2` from scratch.
+
+🔴 ERROR: `error: subprocess-exited-with-error`
+
+```
+Could not find openssl via pkg-config.
+The system library openssl required by crate `openssl-sys` was not found.
+```
+
+✅ SUCCESS: Install required Development Packages:
+
+```
+sudo apt update
+sudo apt install -y libssl-dev pkg-config
+openssl version
+pkg-config --version
+```
+
+6. Retry:
+```
+pip3 install PyDrive2
+```
+
+⚠️ WARNING: Takes a lot of time, like 2 hours!!!
+
 
 # Projects Old
 ## NASA API Wallpaper
@@ -271,7 +413,7 @@ https://github.com/googlearchive/PyDrive/issues/21
 - import multiprocessing (with lock)
 	- demos/raspetarberryPiDemoLCD1602AndTempSensorDHT11_01.py
 
-# Known Issues
+# Known Issues (Common)
 
 ## Raspberry Pi Clock Inaccurate
 
@@ -286,7 +428,7 @@ sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -
 
 ## Raspberry Pi Boot Issues due to SD Card
 
-⚠️ ERROR: When Raspberry Pi gets booted, the following series of errors occur in Terminal:
+🔴 ERROR: When Raspberry Pi gets booted, the following series of errors occur in Terminal:
 
 ```
 mmc0: timeout waiting for hardware interrupt.
