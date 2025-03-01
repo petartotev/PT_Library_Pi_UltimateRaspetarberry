@@ -7,7 +7,7 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 # Contents
 - [Setup](#setup)
 	- [Setup Pico](#setup-pico)
-	- [Setup Pico W](#setup-pico-w)
+	- [Setup Pico W / Pico 2 W](#setup-pico-w--pico-2-w)
 	- [Setup Zero W](#setup-zero-w)
 		- [Initial Setup](#initial-setup-zero-w)
 		- [💡 Send Files using SCP Client](#send-files-using-scp-client)
@@ -27,6 +27,7 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 			- [Known Issues](#known-issues-camera)
 		- [💡 Use Google Drive API to send Images](#use-google-drive-api-to-send-images)
 			- [Known Issues](#known-issues-pydrive2)
+		- [Set Crontab for Parktronic](#set-crontab-for-parktronic)
 - [Projects Old](#projects-old)
 	- [NASA API Wallpaper](#nasa-api-wallpaper)
 	- [Game Blinking RGBY LEDs](#game-blinking-rgby-leds-remembergby)
@@ -62,10 +63,12 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 
 ![pinout](./res/pinout_raspberry_pico.jpg)
 
-## Setup Pico W
+## Setup Pico W / Pico 2 W
 
-Install the latest MicroPython firmware for Pico W:
-- Download the latest UF2 firmware for Pico W from https://micropython.org/download/RPI_PICO_W/.
+Install the latest MicroPython firmware for Pico W / 2W:
+- Download the latest UF2 firmware for Pico W / 2W from:
+	- Pico W: https://micropython.org/download/RPI_PICO_W/
+	- Pico 2 W: https://micropython.org/download/RPI_PICO2_W/
 - Plug in your Pico W while holding the BOOTSEL button.
 - It will appear as a drive on your computer.
 - Drag and drop the .uf2 file you downloaded onto it.
@@ -87,7 +90,6 @@ sudo raspi-config
 ```
 sudo systemctl status ssh
 
-Output Expected:
 Active: active (running) since Wed 2025-02-26 10:33:06 EET; 56min ago
 ```
 5. Update and upgrade:
@@ -96,6 +98,7 @@ sudo apt update -y
 sudo apt upgrade -y
 ```
 ⚠️ WARNING: Upgrade takes quite some time (~ 40-50 minutes).
+
 6. Check if you have all needed Python-related packages installed and if not - install them:
 ```
 python3 --version
@@ -251,35 +254,44 @@ https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
 
 1. Make sure you have `libcamera` package installed:
 ```
-libcamera-hello
-libcamera-still -o test.jpg
+libcamera-hello					# opens preview window for 2-3 seconds
+libcamera-still -o test.jpg		# takes a photo and stores it as file
 ```
 
-2. Install picamera2:
+2. Install `picamera2`:
 
 ```
 sudo apt update
 sudo apt install -y python3-picamera2
+
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+python3-picamera2 is already the newest version (0.3.25-1)...
 ```
 
 #### Known Issues (Camera)
 
-🔴 ERROR 1: Images produced by picamera2 library seem ultra zoomed and blurred in contrast to result from `libcamera-hello` execution
+🔴 ERROR 1: `ImportError: cannot import name randbits` when running `camera_manager.py` which imports `picamera2` library.
+
+🔨 FIX: `camera_manager.py` was dependent on a file named `secrets.py` which has led to this bug.  
+Rename the file from `secrets.py` to `project_secrets.py` and change all occurrences in `camera_manager.py` to fix it.
+
+🔴 ERROR 2: Images produced by picamera2 library seem ultra zoomed and blurred in contrast to result from `libcamera-hello` execution
 https://forums.raspberrypi.com/viewtopic.php?t=380439
 
-✅ SUCCESS: Execute update and upgrade, then reboot, then reinstall picamera2 and lib-camera modules:
-
+🔨 FIX: Execute update and upgrade, then reboot, then reinstall `picamera2` and `lib-camera` modules:
 ```
 sudo apt-get update -y
 sudo apt-get upgrade -y
 ```
 
-🔴 ERROR 2: After update and upgrade, if `libcamera` or `picamera2` command is executed, the following error occurs:
+🔴 ERROR 3: After update and upgrade, if `libcamera` or `picamera2` command is executed, the following error occurs:
 ```
 symbol lookup error: /lib/arm-linux.../libcamera.so.0.3: undefined symbol: _ZN7...compute_optimal_strideER24pisp_image_format_config
 ``` 
 
-✅ SUCCESS: Reinstall `libcamera` and `picamera2`:
+🔨 FIX: Reinstall `libcamera` and `picamera2`:
 ```
 sudo apt-get install --reinstall libcamera-apps libcamera-dev python3-picamera2
 ```
@@ -298,13 +310,12 @@ pip3 install PyDrive2
 
 🔴 ERROR: `error: externally-managed-environment`
 
-✅ SUCCESS: Use a Virtual Environment (Recommended):
+🔨 FIX: Use a Virtual Environment (Recommended):
 ```
 sudo apt install python3-venv
-python3 -m venv myenv
+python3 -m venv myenv 🕐 2-3 min
 source myenv/bin/activate
 ```
-
 To exit the virtual environment, run:
 ```
 deactivate
@@ -320,10 +331,11 @@ This package requires Rust and Cargo to compile extensions.
 Encountered error while generating package metadata.
 ```
 
-✅ SUCCESS: Install `Rust` and `Cargo` as follows:
+🔨 FIX: Install `Rust` and `Cargo` as follows:
 
 1. Download and run the rustup installation script:
-```curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # Follow the on-screen instructions to complete the installation
 ```
@@ -348,31 +360,47 @@ cargo --version
 pip install --upgrade pip
 ```
 
-5. Retry installing `pydrive2` from scratch.
-
-🔴 ERROR: `error: subprocess-exited-with-error`
-
-```
-Could not find openssl via pkg-config.
-The system library openssl required by crate `openssl-sys` was not found.
-```
-
-✅ SUCCESS: Install required Development Packages:
-
-```
-sudo apt update
-sudo apt install -y libssl-dev pkg-config
-openssl version
-pkg-config --version
-```
-
-6. Retry:
+5. Retry installing `pydrive2` from scratch:
 ```
 pip3 install PyDrive2
 ```
 
-⚠️ WARNING: Takes a lot of time, like 2 hours!!!
+🔴 ERROR: `error: subprocess-exited-with-error`
 
+```
+ERROR: Failed building wheel for cryptography
+...
+Could not find openssl via pkg-config.
+The system library openssl required by crate `openssl-sys` was not found.
+```
+
+🔨 FIX: Install required Development Packages and verify:
+
+```
+deactivate
+
+sudo apt update
+sudo apt install -y libssl-dev pkg-config
+openssl version
+pkg-config --version
+
+source myenv/bin/activate
+```
+
+6. Retry:
+```
+pip3 install PyDrive2 ⚠️🕐 2 hours!
+```
+
+### Set Crontab for Parktronic
+
+Execute `crontab -e` in Terminal, add the following line at the bottom and reboot:
+```
+@reboot sleep 60 && /bin/bash -c "cd /home/ptuser/MyDir/PT_Library_Pi_UltimateRaspetarberry/projects/project_pi_zero_w_parktronic/src && /home/ptuser/MyDir/PT_Library_Pi_UltimateRaspetarberry/projects/project_pi_zero_w_parktronic/src/myenv/bin/python3 main.py >> /home/ptuser/cronlog.txt 2>&1"
+```
+where:
+- `@reboot sleep 60` sets the execution 60 seconds after reboot;
+- `... >> /home/ptuser/cronlog.txt 2>&1` logs crontab execution into `cronlog.txt`.
 
 # Projects Old
 ## NASA API Wallpaper
