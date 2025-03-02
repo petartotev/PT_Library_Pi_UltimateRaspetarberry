@@ -129,8 +129,12 @@ sudo apt install python3 python3-pip -y
 ## Project Pico Game Boy
 `./projects/project_pico_game_boy/src/main.py`
 
+![project-game-boy](./projects/project_pico_game_boy/res/project_pico_game_boy_photo_01.jpg)
+
 ## Project Pico W Weather Station
 `./projects/project_pico_w_weather_station/src/main.py`
+
+![project-weather-station](./projects/project_pico_w_weather_station//res/project_pico_w_weather_station_photo_01.jpg)
 
 ### Flow
 
@@ -242,6 +246,8 @@ def send_data(data):
 
 ## Project Pi Zero W Parktronic Security
 `./projects/project_pi_zero_w_parktronic/src/main.py`
+
+![project-parktronic](./projects/project_pi_zero_w_parktronic/res/project_pi_zero_w_parktronic_photo_01.jpg)
 
 ### Prerequisites
 
