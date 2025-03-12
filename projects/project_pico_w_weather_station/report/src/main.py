@@ -94,10 +94,10 @@ def analyze_air_quality(date_from=None, date_to=None):
     plt.savefig(f'{date_from}_{date_to}_temperature_diagram.png')
     plt.clf()  # Clear the current plot to avoid overlap with the next one
 
-    # Step 10: Plot the Humidity data (cyan line for humidity values)
+    # Step 10: Plot the Humidity data (blue line for humidity values)
     plt.figure(figsize=(10, 6))  # Set the figure size (10 inches by 6 inches)
-    plt.plot(df.index, df['Humidity [%]'], color='cyan', zorder=1)  # Plot the humidity data (line)
-    plt.scatter(df.index, df['Humidity [%]'], color='cyan', s=8, zorder=2)  # Add scatter points on top of the line
+    plt.plot(df.index, df['Humidity [%]'], color='blue', zorder=1)  # Plot the humidity data (line)
+    plt.scatter(df.index, df['Humidity [%]'], color='blue', s=8, zorder=2)  # Add scatter points on top of the line
 
     # Background coloring for humidity ranges
     plt.axhspan(0, 40, facecolor='orange', alpha=0.10, zorder=0)   # 0 - 40: Orange
