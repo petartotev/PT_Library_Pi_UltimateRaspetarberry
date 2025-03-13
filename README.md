@@ -28,6 +28,9 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 		- [💡 Use Google Drive API to send Images](#use-google-drive-api-to-send-images)
 			- [Known Issues](#known-issues-pydrive2)
 		- [Set Crontab for Parktronic](#set-crontab-for-parktronic)
+	- [Project Pi Zero 2 W Parking Space Invaders](#project-pi-zero-2-w-parking-space-invaders)
+		- [Ultralytics YOLO](#ultralytics-yolo)
+		- [Torchvision](#torchvision)
 - [Projects Old](#projects-old)
 	- [NASA API Wallpaper](#nasa-api-wallpaper)
 	- [Game Blinking RGBY LEDs](#game-blinking-rgby-leds-remembergby)
@@ -407,6 +410,26 @@ Execute `crontab -e` in Terminal, add the following line at the bottom and reboo
 where:
 - `@reboot sleep 60` sets the execution 60 seconds after reboot;
 - `... >> /home/ptuser/cronlog.txt 2>&1` logs crontab execution into `cronlog.txt`.
+
+## Project Pi Zero 2 W Parking Space Invaders
+
+### Ultralytics YOLO
+
+Install dependencies:
+```
+pip install torch torchvision ultralytics opencv-python matplotlib
+```
+
+### Torchvision
+
+Install dependencies:
+```
+pip install torch torchvision matplotlib pillow numpy
+```
+
+Choose your model:
+- torchvision.models.detection.fasterrcnn_resnet50_fpn
+- torchvision.models.detection.retinanet_resnet50_fpn
 
 # Projects Old
 ## NASA API Wallpaper
