@@ -40,6 +40,8 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 	- [MP3 Greeting on Movement](#mp3-greeting-on-movement)
 	- [Windcock Stepping Motor](#windcock-stepping-motor)
 - [Demos](#demos)
+	- [Radio Demo](#radio-demo)
+- [Demos Old](#demos-old)
 	- [Buzzer Active](#buzzer-active)
 	- [Dust Sensor Demo](#dust-sensor-demo)
 	- [Keypad + Key Switch](#keypad--key-switch)
@@ -119,7 +121,7 @@ sudo apt install python3 python3-pip -y
 - open WinSCP and enter Raspberry Pi's IP address (e.g. 192.168.0.123), username and password;
 - navigate to the directory containing the files and transfer them to your desired location on Windows.
 
-![winscp](./res/winscp-window.jpg)
+![winscp](./res/winscp_window.jpg)
 
 ## Setup Zero 2W
 
@@ -411,6 +413,14 @@ where:
 - `@reboot sleep 60` sets the execution 60 seconds after reboot;
 - `... >> /home/ptuser/cronlog.txt 2>&1` logs crontab execution into `cronlog.txt`.
 
+⚠️ WARNING: Run `python3 main.py`, not `sudo python3 main.py`!
+
+### Run Again After Some Time
+
+In order to run the project after some time, go to the Windows machine, run `google_drive_manager.py` with the `credentials.json` file deleted (as its refresh token is surely deprecated).
+A pop-up Google window will appear - just confirm and a new `credentials.json` file will be populated.
+This needs to be copied on the Pi and used before running the program.
+
 ## Project Pi Zero 2 W Parking Space Invaders
 
 ### Ultralytics YOLO
@@ -441,6 +451,196 @@ Choose your model:
 ## Windcock Stepping Motor
 
 # Demos
+
+## Radio Demo
+
+### Terms
+
+#### Legal Radio Frequencies in Bulgaria
+You should operate in license-free `ISM (Industrial, Scientific, and Medical) bands`.  
+In Bulgaria (and the EU), common license-free frequencies include:
+- 433 MHz (short-range devices, common for RF modules)
+- 868 MHz (LoRa, some RF modules)
+- 2.4 GHz (Wi-Fi, Bluetooth, Zigbee)
+- 5.8 GHz (some industrial applications)
+
+#### Choosing RF Transmitter and Receiver (Low-Cost, Simple Transmission)
+
+For a simple one-way transmission, consider these options:
+- 433 MHz RF Transmitter + Receiver Modules (ASK/OOK modulation)
+	- Cheap (~$5 total)
+	- Works up to a few hundred meters
+	- Works with Raspberry Pi or Pico via GPIO
+	- Example: FS1000A Transmitter & Receiver Module
+- NRF24L01+ (2.4 GHz)
+	- Can send and receive messages bidirectionally
+	- Works well with Raspberry Pi and Pico
+	- More reliable than 433 MHz
+	- Example: NRF24L01+ Module
+- LoRa Modules (868 MHz)
+	- Long-range (up to 10 km)
+	- Good for outdoor demos
+	- Example: RA-02 SX1278 LoRa Module
+
+#### ASK vs. OOK Modulation
+
+![ASK-OOK](./res/radio_ask_modulation_ook_modulation.jpg)
+
+**ASK (Amplitude Shift Keying)**
+
+- ASK: A digital modulation technique where the amplitude of the carrier wave is varied based on the transmitted data.
+- Example: A high amplitude represents binary 1, and a low amplitude represents binary 0.
+- Usage: RFID, remote controls, and simple RF modules (like 433 MHz modules).
+- Best for: ASK can have multiple amplitude levels for more complex data transmission.
+
+**OOK (On-Off Keying)**
+
+- OOK: A special case of ASK, where the signal is either fully ON (1) or completely OFF (0).
+- Example: OOK = ASK with one amplitude level set to zero.
+- Usage: low-power wireless communication (garage door remotes, RF sensors, basic transmitters).
+- Best for: simpler & more power-efficient (since it turns off completely for ‘0’ bits)
+
+#### Manchester Encoding
+
+Most AC remotes use Manchester encoding, rolling codes, or proprietary protocols, making it difficult for `rpi-rf` to decode them properly.
+
+![Manchester Encoding](./res/radio_manchester_encoding.png)
+
+### 433 MHz RF vs 868 MHz LoRa Comparison
+### 433 MHz RF Demo
+#### Transmitter
+
+Using a Simple 433 MHz RF Transmitter with the Pi Zero and send numbers using the `rpi-rf` library:
+
+```
+from rpi_rf import RFDevice
+import time
+
+rfdevice = RFDevice(17)  # GPIO 17 for TX
+rfdevice.enable_tx()
+
+numbers = [1, 2, 3, 5, 7, 11, 13]
+
+for num in numbers:
+    rfdevice.tx_code(num)  # Transmit the number
+    print(f"Sent: {num}")
+    time.sleep(1)
+
+rfdevice.cleanup()
+```
+
+Note that this method is suitable only for numbers!
+
+In order to send text:
+
+```
+from rpi_rf import RFDevice
+import time
+
+rfdevice = RFDevice(17)  # Use GPIO 17 for TX
+rfdevice.enable_tx()
+
+text = "HELLO"
+for char in text:
+    rfdevice.tx_code(ord(char))  # Send each letter as ASCII
+    print(f"Sent: {char} ({ord(char)})")
+    time.sleep(0.5)  # Short delay between transmissions
+
+rfdevice.cleanup()
+```
+
+#### Receiver
+
+Receiving numbers with a 433 MHz RF Receiver using a Pi Zero or Pi 4 with a 433 MHz receiver:
+
+```
+from rpi_rf import RFDevice
+
+rfdevice = RFDevice(27)  # GPIO 27 for RX
+rfdevice.enable_rx()
+
+print("Listening for signals...")
+
+while True:
+    if rfdevice.rx_code_timestamp:
+        print(f"Received: {rfdevice.rx_code}")
+        rfdevice.rx_code_timestamp = None
+```
+
+Receiving text:
+
+```
+received_data = [72, 69, 76, 76, 79]  # Example received numbers
+text = "".join(chr(num) for num in received_data)
+print(text)  # Output: HELLO
+```
+
+### 868 MHz LoRa Demo
+
+#### Option 1: Transmitter
+
+```
+from ulora import LoRa
+from machine import Pin, SPI
+import time
+
+spi = SPI(0, baudrate=5000000, polarity=0, phase=0, sck=Pin(18), mosi=Pin(19), miso=Pin(16))
+
+lora = LoRa(spi, cs=Pin(17), reset=Pin(21), irq=Pin(20))
+lora.set_frequency(868000000)  # Set frequency to 868 MHz
+
+while True:
+    message = 'Hello, world'
+    lora.send(message)
+    print(f'Sent: {message}')
+    time.sleep(2)
+```
+
+#### Option 1: Receiver
+
+```
+from ulora import LoRa
+from machine import Pin, SPI
+
+spi = SPI(0, baudrate=5000000, polarity=0, phase=0, sck=Pin(18), mosi=Pin(19), miso=Pin(16))
+
+lora = LoRa(spi, cs=Pin(17), reset=Pin(21), irq=Pin(20))
+lora.set_frequency(868000000)  # Set frequency to 868 MHz
+
+while True:
+    if lora.received_packet():
+        payload = lora.receive()
+        print(f'Received: {payload}')
+```
+
+#### Option 2: Transmitter and Receiver (2 in 1)
+
+```
+from ulora import LoRa
+from machine import Pin, SPI
+import time
+
+spi = SPI(0, baudrate=5000000, polarity=0, phase=0, sck=Pin(18), mosi=Pin(19), miso=Pin(16))
+
+lora = LoRa(spi, cs=Pin(17), reset=Pin(21), irq=Pin(20))
+lora.set_frequency(868000000)  # Use 868 MHz
+
+while True:
+    # Send a message
+    message = "Ping!"
+    lora.send(message)
+    print(f"Sent: {message}")
+    
+    # Wait for a response
+    time.sleep(1)
+    if lora.received_packet():
+        response = lora.receive()
+        print(f"Received: {response}")
+    
+    time.sleep(2)
+```
+
+# Demos Old
 ## Buzzer Active
 ## Dust Sensor Demo
 ## Keypad + Key Switch
