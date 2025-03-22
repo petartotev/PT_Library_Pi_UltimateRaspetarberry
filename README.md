@@ -506,8 +506,13 @@ Most AC remotes use Manchester encoding, rolling codes, or proprietary protocols
 
 ![Manchester Encoding](./res/radio_manchester_encoding.png)
 
-### 433 MHz RF vs 868 MHz LoRa Comparison
 ### 433 MHz RF Demo
+
+#### Modules
+
+WayinTop Set of 3 433 MHz Radio Transmitter and Receiver Module + 433 MHz Antenna Helical Spiral Spring Remote Control, Super Regeneration Wireless Transmitter Module Burglar Alarm:  
+https://www.amazon.de/dp/B086ZL8W1W
+
 #### Transmitter
 
 Using a Simple 433 MHz RF Transmitter with the Pi Zero and send numbers using the `rpi-rf` library:
@@ -529,9 +534,9 @@ for num in numbers:
 rfdevice.cleanup()
 ```
 
-Note that this method is suitable only for numbers!
+⚠️ WARNING: Note that this method is suitable only for numbers!
 
-In order to send text:
+Sending text:
 
 ```
 from rpi_rf import RFDevice
@@ -576,6 +581,11 @@ print(text)  # Output: HELLO
 ```
 
 ### 868 MHz LoRa Demo
+
+#### Modules
+
+Paradisetronic.com 868MHz SX1276 LoRa Breakout Board with Antenna, Long Range Radio Module for Arduino and Raspberry Pi:  
+https://www.amazon.de/dp/B084NWDFH1
 
 #### Option 1: Transmitter
 
