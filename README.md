@@ -21,6 +21,7 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 			- [Reporting](#reporting)
 		- [💡 Encrypt Secrets with Base64](#encrypt-secrets-with-base-64)
 		- [💡 Send Data to Google Sheets](#send-data-to-google-sheets)
+	- [Project Pico GPS Logger](#project-pico-gps-logger)
 	- [Project Pi Zero W Parktronic Security](#project-pi-zero-w-parktronic-security)
 		- [Prerequisites](#prerequisites)
 		- [💡 Set Raspberry Pi Camera Module v2.1 NoIR](#set-raspberry-pi-camera-module-v21-noir)
@@ -248,6 +249,21 @@ def send_data(data):
     print(response.text)
     response.close()
 ```
+
+## Project Pico GPS Logger
+
+1. Get a CSV file populated with the following structure:
+
+```
+datetime,latitude,longitude
+2025-01-01 12:00:00, 42.5048, 27.4626
+2025-01-01 13:00:00, 43.2141, 27.9147
+...
+```
+
+2. Go to https://www.gpsvisualizer.com/ and upload the CSV file as input.
+
+3. View or Download the output file - a trace of the logged GPS points.
 
 ## Project Pi Zero W Parktronic Security
 `./projects/project_pi_zero_w_parktronic/src/main.py`
