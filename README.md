@@ -6,12 +6,10 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 
 # Contents
 - [Setup](#setup)
-	- [Setup Pico](#setup-pico)
-	- [Setup Pico W / Pico 2 W](#setup-pico-w--pico-2-w)
-	- [Setup Zero W](#setup-zero-w)
+	- [Setup Pico / Setup Pico W / Pico 2 W](#setup-pico--pico-w--pico-2-w)
+	- [Setup Zero W / Zero 2 W](#setup-zero-w--zero-2-w)
 		- [Initial Setup](#initial-setup-zero-w)
 		- [💡 Send Files using SCP Client](#send-files-using-scp-client)
-	- [Setup Zero 2W](#setup-zero-2w)
 	- [Setup Pi 4](#setup-pi-4)
 - [Projects](#projects)
 	- [Project Pico Game Boy](#project-pico-game-boy)
@@ -22,6 +20,8 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 		- [💡 Encrypt Secrets with Base64](#encrypt-secrets-with-base-64)
 		- [💡 Send Data to Google Sheets](#send-data-to-google-sheets)
 	- [Project Pico GPS Logger](#project-pico-gps-logger)
+		- [Prerequisites GPS](#prerequisites-gps)
+		- [Setup GPS](#setup-gps)
 	- [Project Pi Zero W Parktronic Security](#project-pi-zero-w-parktronic-security)
 		- [Prerequisites](#prerequisites)
 		- [💡 Set Raspberry Pi Camera Module v2.1 NoIR](#set-raspberry-pi-camera-module-v21-noir)
@@ -33,29 +33,16 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 		- [Ultralytics YOLO](#ultralytics-yolo)
 		- [Torchvision](#torchvision)
 - [Projects Old](#projects-old)
-	- [NASA API Wallpaper](#nasa-api-wallpaper)
-	- [Game Blinking RGBY LEDs](#game-blinking-rgby-leds-remembergby)
-	- [Parktronic Buzzer](#parktronic-buzzer)
-	- [Temperature on LCD Screen](#temperature-on-lcd-screen)
-	- [Dice 7-Segment](#dice-7-segment)
-	- [MP3 Greeting on Movement](#mp3-greeting-on-movement)
-	- [Windcock Stepping Motor](#windcock-stepping-motor)
 - [Demos](#demos)
 	- [Radio Demo](#radio-demo)
 - [Demos Old](#demos-old)
-	- [Buzzer Active](#buzzer-active)
-	- [Dust Sensor Demo](#dust-sensor-demo)
-	- [Keypad + Key Switch](#keypad--key-switch)
-	- [RGB LEDs](#rgb-leds)
-	- [WiFi Pico](#wifi-pico)
-	- [Camera](#camera)
-	- [Keypad + LCD](#keypad--lcd)
-	- [Temperature Sensor DHT11](#temperature-sensor-dht11)
-	- [Stepping Motor](#stepping-motor)
 - [Sensors](#sensors)
-	- [Dust Sensor Sharp GP2Y1010AU0F](#dust-sensor-sharp-gp2y1010au0f)
 	- [LCD1602 RGB Module](#lcd1602-rgb-module)
 	- [DHT22 Temperature and Humidity Sensor](#dht22-temperature-and-humidity-sensor)
+	- [Dust Sensor Sharp GP2Y1010AU0F](#dust-sensor-sharp-gp2y1010au0f)
+	- [GPS Module](#gps-module)
+	- [Light Sensor](#light-sensor)
+	- [Joystick](#joystick)
 - [Technologies](#technologies)
 - [Known Issues](#known-issues-common)
 	- [Raspberry Pi Inaccurate Clock](#raspberry-pi-clock-inaccurate)
@@ -65,22 +52,21 @@ PT_Library_Pi_UltimateRaspetarberry is a public repo which contains a personal c
 
 # Setup
 
-## Setup Pico
+## Setup Pico / Pico W / Pico 2 W
 
 ![pinout](./res/pinout_raspberry_pico.jpg)
 
-## Setup Pico W / Pico 2 W
-
 Install the latest MicroPython firmware for Pico W / 2W:
 - Download the latest UF2 firmware for Pico W / 2W from:
+	- Pico: https://micropython.org/download/RPI_PICO/
 	- Pico W: https://micropython.org/download/RPI_PICO_W/
 	- Pico 2 W: https://micropython.org/download/RPI_PICO2_W/
-- Plug in your Pico W while holding the BOOTSEL button.
+- Plug in your Pico while holding the BOOTSEL button.
 - It will appear as a drive on your computer.
 - Drag and drop the .uf2 file you downloaded onto it.
 - The board will reboot into MicroPython.
 
-## Setup Zero W
+## Setup Zero W / Zero 2 W
 
 ![pinout](./res/pinout_raspberry_zero.jpg)
 
@@ -124,8 +110,6 @@ sudo apt install python3 python3-pip -y
 
 ![winscp](./res/winscp_window.jpg)
 
-## Setup Zero 2W
-
 ## Setup Pi 4
 
 ![pinout](./res/pinout_raspberry_pi_4.jpg)
@@ -133,14 +117,23 @@ sudo apt install python3 python3-pip -y
 # Projects
 
 ## Project Pico Game Boy
-`./projects/project_pico_game_boy/src/main.py`
 
 ![project-game-boy](./projects/project_pico_game_boy/res/project_pico_game_boy_photo_01.jpg)
 
+`./projects/project_pico_game_boy/src/main.py`
+
+- [LCD RGB 1602](#lcd1602-rgb-module)
+- [Joystick](#joystick)
+
 ## Project Pico W Weather Station
-`./projects/project_pico_w_weather_station/src/main.py`
 
 ![project-weather-station](./projects/project_pico_w_weather_station//res/project_pico_w_weather_station_photo_01.jpg)
+
+`./projects/project_pico_w_weather_station/src/main.py`
+
+- [LCD RGB 1602](#lcd1602-rgb-module)
+- [DHT 22](#dht22-temperature-and-humidity-sensor)
+- [Dust Sensor](#dust-sensor-sharp-gp2y1010au0f)
 
 ### Flow
 
@@ -174,7 +167,7 @@ sudo apt install python3 python3-pip -y
 
 ### Encrypt Secrets with Base-64
 
-1. Encode Your Secrets (Run Python on Your Computer)
+1. Encode Your Secrets (Run Python on Your Computer):
 
 ```
 import base64
@@ -193,7 +186,7 @@ print(f"PASSWORD: {encoded_password}")
 print(f"NASA_API_KEY: {encoded_api_key}")
 ```
 
-2. Update Your secrets.py on the Pico
+2. Update Your secrets.py on the Pico:
 
 ```
 import base64
@@ -203,7 +196,7 @@ PASSWORD = base64.b64decode('WU1VUl3XLOVEX1BBB1NXT1JE').decode()
 NASA_API_KEY = base64.b64decode('QUZDMTIzVASA').decode()
 ```
 
-3. Keep main.py Unchanged
+3. Keep `main.py` unchanged.
 
 ### Send Data to Google Sheets
 
@@ -252,23 +245,45 @@ def send_data(data):
 
 ## Project Pico GPS Logger
 
-1. Get a CSV file populated with the following structure:
+![GPS Logger](./projects/project_pico_gps_logger/res/project_pico_gps_logger_photo_01.jpg)
 
+`./projects/project_pico_gps_logger/src/main.py`
+
+- [LCD RGB 1602](#lcd1602-rgb-module)
+- [GPS Module](#gps-module)
+- Big Buttons
+
+### Prerequisites GPS
+
+1. Download `LC76G_GPS_Module_code` demo from https://www.waveshare.com/wiki/LC76G_GNSS_Module#Working_with_Raspberry_Pi_Pico.
+2. Copy `./pico/l76x.py` and `./pico/micropyGPS` directory into Pico.
+3. Edit `./pico/example/coordinates_converted.py` as `gps_manager.py`
+
+### Setup GPS
+
+1. Run `main.py` => current GPS coordinates get logged in `gps_coords.log`:
 ```
-datetime,latitude,longitude
-2025-01-01 12:00:00, 42.5048, 27.4626
-2025-01-01 13:00:00, 43.2141, 27.9147
+2025-03-28 17:46:58,43.136122761N,26.368274364E,19
+2025-03-28 17:47:02,42.525748767N,28.375274364E,19
 ...
 ```
+2. Rename `gps_coords.log` as `gps_coords.csv` and add the following headers on top of the file:
+```
+timestamp,latitude,longitude,altitude
+```
+3. Go to https://www.gpsvisualizer.com/ and upload `gps_coords.csv` as input.
+4. `View` or `Download` the output file - a track of the logged GPS coordinates.
 
-2. Go to https://www.gpsvisualizer.com/ and upload the CSV file as input.
-
-3. View or Download the output file - a trace of the logged GPS points.
 
 ## Project Pi Zero W Parktronic Security
-`./projects/project_pi_zero_w_parktronic/src/main.py`
 
 ![project-parktronic](./projects/project_pi_zero_w_parktronic/res/project_pi_zero_w_parktronic_photo_01.jpg)
+
+`./projects/project_pi_zero_w_parktronic/src/main.py`
+
+- [Camera Module](#camera-module-v21-noir)
+- [Ultrasonic Sensor](#ultrasonic-sensor)
+- LED Lights
 
 ### Prerequisites
 
@@ -458,13 +473,13 @@ Choose your model:
 - torchvision.models.detection.retinanet_resnet50_fpn
 
 # Projects Old
-## NASA API Wallpaper
-## Game Blinking RGBY LEDs "RemembeRGBY"
-## Parktronic Buzzer
-## Temperature on LCD Screen
-## Dice 7-Segment
-## MP3 Greeting on Movement
-## Windcock Stepping Motor
+- NASA API Wallpaper
+- Game Blinking RGBY LEDs "RemembeRGBY"
+- Parktronic Buzzer
+- Temperature on LCD Screen
+- Dice 7-Segment
+- MP3 Greeting on Movement
+- Windcock Stepping Motor
 
 # Demos
 
@@ -667,23 +682,17 @@ while True:
 ```
 
 # Demos Old
-## Buzzer Active
-## Dust Sensor Demo
-## Keypad + Key Switch
-## RGB LEDs
-## WiFi Pico
-## Camera
-## Keypad + LCD
-## Temperature Sensor DHT11
-## Stepping Motor
+- Buzzer Active
+- Dust Sensor Demo
+- Keypad + Key Switch
+- RGB LEDs
+- WiFi Pico
+- Camera
+- Keypad + LCD
+- Temperature Sensor DHT11
+- Stepping Motor
 
 # Sensors
-
-## Dust Sensor Sharp GP2Y1010AU0F
-- https://www.waveshare.com/dust-sensor.htm
-- https://erelement.com/shop/sharp-gp2y1010au0f/
-
-![air_quality](./res/air_quality.jpg)
 
 ## LCD1602 RGB Module
 - https://www.waveshare.com/lcd1602-rgb-module.htm
@@ -691,6 +700,27 @@ while True:
 
 ## DHT22 Temperature and Humidity Sensor
 - https://electrocredible.com/raspberry-pi-pico-dht22-micropython-tutorial/
+
+## Dust Sensor Sharp GP2Y1010AU0F
+- https://www.waveshare.com/dust-sensor.htm
+- https://erelement.com/shop/sharp-gp2y1010au0f/
+
+![air_quality](./res/air_quality.jpg)
+
+## GPS Module
+- https://www.youtube.com/watch?v=CLsXnSOIYMg&ab_channel=CoreElectronics
+- https://www.waveshare.com/wiki/LC76G_GNSS_Module#Working_with_Raspberry_Pi_Pico
+- https://erelement.com/shop/gps-module-lc76g/
+
+## Light Sensor
+- https://erelement.com/shop/tsl2591-ws/
+- https://www.waveshare.com/wiki/TSL25911_Light_Sensor
+
+## Joystick
+
+## Camera Module V2.1 NoIR
+
+## Ultrasonic Sensor
 
 # Technologies
 - import multiprocessing (with lock)
