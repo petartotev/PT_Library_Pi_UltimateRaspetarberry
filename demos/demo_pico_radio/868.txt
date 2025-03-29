@@ -1,0 +1,159 @@
+Yes! The Paradisetronic.com 868MHz SX1276 LoRa Breakout Board can be used for both transmitting and receiving radio signals at 868 MHz.
+The SX1276 chip supports full-duplex communication, but LoRa itself operates in a half-duplex manner—meaning it can either transmit or receive at a given time, but not both simultaneously on the same module.
+
+How Does It Work?
+You can use one module to send data and the same module to receive data by switching between TX (transmit) and RX (receive) modes in software.
+If you have two modules, you can set up bidirectional communication, where one transmits while the other receives, and vice versa.
+📌 Python Library for SX1276 on Raspberry Pi or Raspberry Pi Pico
+A great Python library for working with LoRa SX1276 is pyLoRa.
+However, for Raspberry Pi Pico (MicroPython), lora or sx127x libraries are preferred.
+
+🔹 For Raspberry Pi (Linux-based, e.g., Pi Zero W, Pi 4)
+You can use the pySX127x library.
+
+🔹 For Raspberry Pi Pico (MicroPython)
+You can use the sx127x LoRa MicroPython library
+
+📜 Example Code for Raspberry Pi (using pySX127x)
+
+1️⃣ Install the Library
+Run this on your Raspberry Pi (Zero W, 4, etc.):
+
+pip install pySX127x
+
+2️⃣ Transmitter Code
+
+
+
+from SX127x.LoRa import LoRa
+from SX127x.board_config import BOARD
+import time
+
+BOARD.setup()
+
+class LoRaSender(LoRa):
+    def __init__(self, verbose=False):
+        super().__init__(verbose)
+        self.set_mode(MODE.SLEEP)
+        self.set_freq(868)  # Set frequency to 868 MHz
+
+    def start(self):
+        print("Sending LoRa Message...")
+        self.write_payload([ord(c) for c in "Hello, World"])
+        self.set_mode(MODE.TX)
+        time.sleep(2)  # Give time for transmission
+
+lora = LoRaSender(verbose=False)
+lora.start()
+
+
+
+3️⃣ Receiver Code
+
+
+
+class LoRaReceiver(LoRa):
+    def __init__(self, verbose=False):
+        super().__init__(verbose)
+        self.set_mode(MODE.SLEEP)
+        self.set_freq(868)
+        self.set_mode(MODE.RXCONT)  # Continuous receive mode
+
+    def on_rx_done(self):
+        print("Received:", ''.join(chr(c) for c in self.read_payload()))
+        self.clear_irq_flags(RxDone=1)
+
+lora = LoRaReceiver(verbose=False)
+while True:
+    pass  # Keeps listening for incoming messages
+
+
+
+📜 Example Code for Raspberry Pi Pico (MicroPython using sx127x)
+
+🔹 This works with MicroPython-compatible boards.
+
+1️⃣ Install the Library
+First, upload the sx127x MicroPython library to your Pico.
+
+2️⃣ Transmitter Code for Pico
+
+
+
+from machine import SPI, Pin
+from sx127x import SX127x
+import time
+
+spi = SPI(1, baudrate=10000000, polarity=0, phase=0)
+lora = SX127x(spi, cs=Pin(5), irq=Pin(6), rst=Pin(7), freq=868E6)
+
+while True:
+    lora.println("Hello, LoRa!")
+    print("Sent: Hello, LoRa!")
+    time.sleep(2)
+
+
+
+3️⃣ Receiver Code for Pico
+
+
+
+while True:
+    msg = lora.receive()
+    if msg:
+        print("Received:", msg)
+
+
+🚀 Key Takeaways
+✔ SX1276 LoRa modules can both transmit and receive
+✔ Use pySX127x for Raspberry Pi and sx127x for Raspberry Pi Pico
+✔ LoRa works in half-duplex mode, so a module can’t send and receive at the exact same time
+✔ You can switch between TX and RX in code for bidirectional communication
+
+================================================================================================================================
+
+Would you like help with wiring connections? 😊
+
+🔌 Wiring the SX1276 LoRa Module to Raspberry Pi & Raspberry Pi Pico
+
+1️⃣ Wiring for Raspberry Pi (Zero W, 4, etc.)
+
+Use the SPI interface on the Raspberry Pi.
+
+📍 SX1276 (LoRa) → Raspberry Pi GPIO
+SX1276 Pin		Raspberry Pi GPIO Pin		Description
+VCC				3.3V (Pin 1)				Power supply (⚠️ Use 3.3V, NOT 5V!)
+GND				GND (Pin 6)					Ground
+MISO			GPIO 9 (Pin 21)				SPI MISO (Master In, Slave Out)
+MOSI			GPIO 10 (Pin 19)			SPI MOSI (Master Out, Slave In)
+SCK				GPIO 11 (Pin 23)			SPI Clock
+NSS (CS)		GPIO 8 (Pin 24)				Chip Select
+DIO0 (IRQ)		GPIO 25 (Pin 22)			Interrupt for message received
+RST				GPIO 22 (Pin 15)			Reset Pin
+
+🔹 Make sure SPI is enabled on Raspberry Pi
+
+Run:
+sudo raspi-config
+➡ Navigate to Interfacing Options → SPI → Enable
+
+2️⃣ Wiring for Raspberry Pi Pico
+Use the SPI1 interface on the Pico.
+
+📍 SX1276 (LoRa) → Raspberry Pi Pico
+SX1276 Pin		Raspberry Pi Pico Pin		Description
+VCC				3.3V 	(Pin 36)			Power supply
+GND				GND 	(Pin 38)			Ground
+MISO			GPIO 12 (Pin 16)			SPI MISO
+MOSI			GPIO 11 (Pin 15)			SPI MOSI
+SCK				GPIO 10 (Pin 14)			SPI Clock
+NSS (CS)		GPIO 5 	(Pin 7)				Chip Select
+DIO0 (IRQ)		GPIO 6 	(Pin 9)				Interrupt
+RST				GPIO 7 	(Pin 10)			Reset
+
+🛠️ Notes & Tips
+✔ Use 3.3V for power (not 5V) – The SX1276 is not 5V tolerant!
+✔ Check the antenna – Always connect the included antenna before powering the module to avoid damage.
+✔ Use short, high-quality jumper wires – Long or poor-quality wires can affect SPI communication.
+
+Would you like me to modify the Python code to match your setup? 😊
